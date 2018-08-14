@@ -379,7 +379,7 @@ Response body:
 
 ## LootClicker (ALPHA) - Play at http://www.lootclicker.online
 
-- For more screenshots visit http://www.loottoken.io/lootclicker
+- For more information and screenshots please visit http://www.loottoken.io/lootclicker
 
 
 ![GAME_1](https://s3.amazonaws.com/loottoken.io/lc_1.png)
