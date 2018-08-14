@@ -385,10 +385,10 @@ Response body:
 ![GAME_1](https://s3.amazonaws.com/loottoken.io/lc_1.png)
 
 
-![GAME_2](https://s3.amazonaws.com/loottoken.io/idle2.jpg)
+![GAME_2](https://s3.amazonaws.com/loottoken.io/idle_3.jpg)
 
 
-![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo1.jpg)
+![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
 
 
 
