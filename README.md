@@ -63,7 +63,8 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
 
 ```
 {
-  "operation":       # The operation the maker of this order wants to perform.
+  "operation":       # The operation the maker of this order wants to perform. 
+                      "put_offer,buy_offer,cancel_offer,give_item,remove_item,withdraw"
   "address":         # The address of the maker of the order.
   "taker_address":   # Optionally the address the maker of the order specifies.
   "tokens":          # How many tokens the originator is spending.
@@ -74,6 +75,8 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
   "salt":            # A unique GUID so that this order may only occur once.
 }
 ```
+
+
 
 ### Framework API Routes
 
