@@ -1,16 +1,21 @@
 """
 ===== LootMarketExchange =====
+
 MIT License
+
 Copyright 2018 LOOT Token Inc. & Warped Gaming LLC
+
+Author: @poli
+Email: chris.luke.poli@gmail.com
+
 This smart contract enables the creation of marketplaces for games, that is, it
 integrates a storage system for items on the NEO blockchain as "digital assets" where
 they are tradeable for the NEP-5 asset LOOT tied to a fiat value. A marketplace is registered
 with an owner, who has exclusive permissions to invoke the operations on this marketplace.
+
 For our proof of concept game LootClicker, this contract includes its first decentralized game mode 
 inspired by the "Battle Royale" genre of games. 
 All aspects of game logic are decided in this contract and it aims to show what a NEO smart contract is capable of.
-Author: @poli
-Email: chris.luke.poli@gmail.com
 """
 
 from boa.builtins import concat, list, range, take, substr, verify_signature, sha256, hash160, hash256
