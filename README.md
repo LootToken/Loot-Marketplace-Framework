@@ -23,21 +23,15 @@
 ![GAME_2](https://s3.amazonaws.com/loottoken.io/ss25.jpg)
 
 
-![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
-
-
-![GAME_4](https://s3.amazonaws.com/loottoken.io/inventory_newest.jpg)
-
-
 ![GAME_5](https://s3.amazonaws.com/loottoken.io/market_newest.jpg)
 
 
 #### Overview
-- LootClicker is our proof of concept MMO casual clicker game. 
-- It was designed as a game to play casually or on the side while trading cryptocurrencies.
-- Players can earn items from crates, or in decentralized game modes. 
+- LootClicker is our f2p MMO casual clicker game. 
+- It was built from the ground up specifically for the NEO blockchain and as a game to play casually or on the side while trading cryptocurrencies.
 - The centralized aspect of game logic itself is managed by an authoritative server, every action which may effect the in game economy and value of assets is verified and accepted by the server, this will attempt to remove all cheating from the game to properly simulate an in game economy.
-- The in game equipable assets are all integrated into the framework and therefore registered on the NEO blockchain.
+- Players can earn items from crates, or in decentralized game modes. 
+- The in game equippable assets are all integrated into the framework and therefore registered on the NEO blockchain.
 
 #### Game Features
 
@@ -60,7 +54,7 @@ The following features are currently working:
 - Equip pets, cosmetics and weapons to use in battle.
 - Leaderboards for guilds and players.
 - Progress is never lost, and bound to your account/blockchain.
-- A full functioning in game marketplace has been integrated to showcase how assets can be sold, bought and traded on the marketplace framework.
+- A full functioning in game marketplace has been integrated to showcase how assets can be sold, bought and traded on the Loot marketplace framework.
 
 #### Accessing LootClicker items in the wallet
 - You may register an account with a pre-existing private key, or else a new one will be created for you.
@@ -83,22 +77,21 @@ We aim to have the following released by the next patch as we transition into op
 
 ### Blockchain Royale
 
+#### As a part of the NEO-Game competition, we wanted to really showcase the potential of what a smart contract is capable of. We have decided to release our first decentralized game mode based on the popular "Battle Royale" gamemode. 
+
 ![BR_1](https://s3.amazonaws.com/loottoken.io/br_mode.jpg)
 
-As a part of the NEO-Game competition, we wanted to showcase the potential of what a smart contract is capable of. We have decided to release our first decentralized game mode based on the popular "Battle Royale" gamemode. 
-
-- For a player to perform an action, they must sign and send an invocation transaction with their private key and the required parameters of what they want to do.
+- For a player to perform an action, they must sign and send an invocation transaction with their private key and the ensure the required parameters of what they want to do are in the script.
 - Every single action of this game mode is decided and resolved inside the smart contract and output through ```Notify``` events which are relayed to the game including:
 
-  - Movement: moving in a direction along the map.
-  - Map boundaries: where the player is allowed to move.
-  - Random in game events: areas on the map being randomly marked off and destroyed.
-  - Timeouts: inactive players can be removed.
-  - Looting and fighting: this can be randomly decided on the blockchain fairly and publicly.
-  - Giving out rewards to winners: the smart contract can be programmed to give rewards based on conditions.
+  - Movement: moving the player in a direction along a map.
+  - Map boundaries: defining where the player is allowed to move along a map.
+  - Random in game events: dynamically spawning areas on the map that are randomly marked off and destroyed.
+  - Timeouts: ensuring inactive players can be removed.
+  - Looting and fighting: random rolls decided on the blockchain result in public and fair results.
+  - Rewards: the smart contract can be programmed to give rewards to addresses based on certain conditions.
 
-
-- Smart contracts are able to emit ```Notify``` events so we know what occurred on the blockchain such as from our contract:
+- Smart contracts are able to emit ```Notify``` events so we know what occurred on the blockchain such as the following from our contract:
 ```
 details = ["BR", event_code,"BR_sign_up",address, result]
 Notify(details)
@@ -106,7 +99,7 @@ Notify(details)
 Here we can see that an address has signed up, and what the result was.
 
 - Important game information is caught by our API, stored and able to be publicly queryable through the API calls listed below.
-- We can then show the player game logic based on the results decided in a smart contract by querying these logs back in order.
+- We can then from in game, call the API and show the player game logic based on the results decided in a smart contract by querying these logs back in order.
 
 
 #### Phases
@@ -156,10 +149,10 @@ It provides the following functionality:
 - Claiming and redeeming generated GAS.
 - Address book.
 - Switch between mainnet/testnet/privatenet.
-- Viewing names, stats, descriptions and photos of registered marketplace assets.
+- Viewing names, stats, descriptions and photos of any registered games marketplace assets.
 - Viewing prices and balances of system assets and NEP-5 tokens.
 - Tracking the 24 hour change of your balance and individual NEO assets.
-- Full interaction with the LOOT Marketplace framework, including trading/buying/selling/removing/cancelling game assets.
+- Full interaction with the LOOT Marketplace framework, including trading, buying, selling, cancelling, and removing registered game assets.
 - Two currently registered titles, LootClicker and Project: MEYSA with more to be announced soon.
 - A network monitor for the framework in which all data is publicly queryable.
 
@@ -177,12 +170,46 @@ It provides the following functionality:
 ### Download Links
 
 #### Wallet release: TBA
+
 - Upon completion of code review by a NEO development group, the download links and source code will be MIT licensed and placed in this repository.
 
-#### WARNING: Mainnet is available, but please do not use this feature until the wallet code has been thoroughly tested and reviewed by a NGD and/or NEL member. Doing so beforehand could potentially result in a loss of funds. 
+## Framework & LootMarketsContract
 
+#### Overview
 
-### Network Order Format
+- We intially wanted to integrate digital assets into LootClicker and saw a potential for targetting a larger audience.
+- The problem we have noticed with some decentralized exchanges and NFT contracts is the speed at which transactions occur. This can be a major inconvinience on the players gaming experience and is the main reason we decided to build the Loot framework.
+- The main necessity of our smart contract is to act as the backbone of our framework, it allows completely decentralized ownership and the exchange of assets for a token pegged to a fiat value. 
+- The utility NEP-5 token contract has been slightly edited to allow deposit/withdrawal in and out of the smart contract, so that funds can be managed by the framework. This functionality is currently built in to the wallet.
+- Transactions can be relayed by any party, upon mainnet release, this will be a completely open network where anyone can be rewarded for powering the network. The fees are payed out decidedly by publicly viewable algorithms converting gas costs to LOOT fees by several variables.
+- To add to further decentralization on this front-running incentivized network, the framework is currently being extended into many nodes which communicate to eachother to ensure no downtime.
+- In depth details are being documented in our whitepaper which will be released.
+
+##### Marketplace
+
+- A marketplace defined in our smart contract is essentially a class of assets in the contract that address/addresses have exclusive ownership over. This means they are able to create and distribute assets to players of their game.
+- A marketplace can be created dynamically at any time by the contract owner, which will immediately give them exclusive market rights.
+- These distributed assets can then be bought, sold, traded and removed by a NEO address.
+- The marketplace owner is someone who has exclusive asset rights over their named marketplace assets.
+- The economic value of these assets is decided upon by the community of an integrated title.
+- It is important to note however this does not allow the marketplace owner to take items from the player at any time or have any control of the players assets once given to them.
+
+##### General
+
+- The way our framework functions, a marketplace owner must sign these transactions to let them occur such that everything is ordered correctly. 
+- These orders get packaged into transactions by the framework and distributed to the network and end up being invoked inside the smart contract for final resolution.
+  - While trading is active in the contract, they must have the final say in when a transaction is allowed to occur. 
+  - This is automatically done for the registered marketplace owner when a valid order is posted to ```/add_order/``` on the API and they have signed the parameters with their private key, also attaching a signature and public key. We can quickly check if they are a marketplace owner by querying the smart contract.
+- As seen in the smart contract, we can verify parameters signed by private keys to ensure all parties involved in the transaction want an order to occur.
+
+##### Unforseen Occurrence
+
+- It should be noted that in the case of an emergency, we have added methods to allow termination of trading, in which everyone will be able to use functions normally, verified by ```CheckWitness```.
+- If a relayed transaction was ever to fail during the testing stages of development, our framework contains a quick emergency chain rebuilding method, picking out faulty transactions.
+- As orders are signed to exact parameters by a users private key, there is no possible way a user will ever lose their digital assets or tokens. 
+- We have multiple measures in place to ensure a faulty transaction or bad actor transaction that is relayed is never sent to a NEO node.
+
+#### Network Order Format
 
 An order can be sent via a raw string in JSON format in the body of a POST request through the route  ```/add_order/``` to the public API with the following details of what order an address would like to place.
 
@@ -206,42 +233,6 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
 }
 ```
 
-## Framework & LootMarketsContract
-
-
-#### Overview
-
-- We intially wanted to integrate digital assets into LootClicker and saw a potential for targetting a larger audience.
-- The problem we have noticed with some decentralized exchanges and NFT contracts is the speed at which transactions occur. This can be a major inconvinience on the players gaming experience and is the main reason we decided to build the Loot framework.
-- The main necessity of our smart contract is to act as the backbone of our framework, it allows completely decentralized ownership and the exchange of assets for a token pegged to a fiat value.
-- The utility NEP-5 token contract has been edited to allow easy deposit/withdrawal in and out of the smart contract, so that funds can be managed by the framework. This functionality is currently built in to the wallet.
-- Transactions can be relayed by any party, upon mainnet release, this will be a completely open network where anyone can be rewarded for powering the network. The fees are payed out decidedly by publicly viewable algorithms converting gas costs to LOOT fees by several variables.
-- To add to further decentralization on this front-running incentivized network, the framework is currently being extended into many nodes which communicate to eachother to ensure no downtime.
-- In depth details are being documented in our whitepaper which will be released soon.
-
-##### Marketplace
-
-- A marketplace defined in our smart contract is essentially a class of assets in the contract that address/addresses have exclusive ownership over. This means they are able to create and distribute assets to players of their game.
-- A marketplace can be created dynamically at any time by the contract owner, which will immediately give them exclusive market rights.
-- These distributed assets can then be bought, sold, traded and removed by a NEO address.
-- The marketplace owner is someone who has exclusive asset rights over their named marketplace assets.
-- The economic value of these assets is decided upon by the community of an integrated title.
-- It is important to note however this does not allow the marketplace owner to take items from the player at any time or have any control of the players assets once given.
-
-##### General
-
-- The way our framework functions, a marketplace owner must sign these transactions to let them occur such that everything is ordered correctly. 
-- These orders get packaged into transactions by the framework and distributed to the network and end up being invoked inside the smart contract for final resolution.
-  - While trading is active in the contract, they must have the final say in when a transaction is allowed to occur. 
-  - This is automatically done for the registered marketplace owner when a valid order is posted to ```/add_order/``` on the API and they have signed the parameters with their private key, also attaching a signature and public key. We can quickly check if they are a marketplace owner by querying the smart contract.
-- As seen in the smart contract, we can verify parameters signed by private keys to ensure all parties involved in the transaction want an order to occur.
-
-##### Unforseen Occurrence
-
-- It should be noted that in the case of an emergency, we have added methods to allow termination of trading, in which everyone will be able to use functions normally, verified by ```CheckWitness```.
-- Our framework contains a fast emergency chain rebuilding method, picking out faulty transactions, if a relayed transaction was ever to fail during the testing stages of development. 
-- As orders are signed to exact parameters by a users private key, there is no possible way a user will ever lose their digital assets or tokens. 
-- We have multiple measures in place to ensure a faulty transaction or bad actor transaction that is relayed is not sent to a NEO node.
 
 ## Framework API - http://lootmarketplacenode.com:8090/
 
