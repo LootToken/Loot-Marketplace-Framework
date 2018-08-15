@@ -2,7 +2,7 @@
 
 #### We are bringing blockchain gaming to the mainstream, providing a complete and viable solution to digitalizing assets in fast paced large scale commercial games without hindering the end user.
 
-#### At it's core we are targeting the gaming industry; allowing the trading of digitalized assets instantly and securely for the end user, through the utilization of the NEO blockchain, smart contracts and a front-running incentivized relaying network. 
+#### At its core we are targeting the gaming industry; allowing the trading of digitalized assets instantly and securely for the end user, through the utilization of the NEO blockchain, smart contracts and a front-running incentivized relaying network. 
 
 #### Producers and developers can simply integrate with the network, registering their marketplace in the smart contract. They will then be able to leverage exclusive management rights to their assets, without needing to trust a third party. 
 
