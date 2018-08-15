@@ -85,7 +85,7 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
 ![GAME_1](https://s3.amazonaws.com/loottoken.io/lc_1.png)
 
 
-![GAME_2](https://s3.amazonaws.com/loottoken.io/idle_3.jpg)
+![GAME_2](https://s3.amazonaws.com/loottoken.io/ss24.jpg)
 
 
 ![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
