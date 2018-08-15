@@ -8,7 +8,7 @@
 
 #### The framework and decentralized game modes are built upon our open source smart contract.
 #### https://github.com/LootToken/Loot-Marketplace-Framework/blob/master/LootMarketsContract.py
-#### All framework interaction occurs on our public API listed at the bottom of this document. As stated below, once reviewed by a certified NEO development group, our wallet will be open sourced.
+#### All framework interaction occurs on our public API listed at the bottom of this document. Upon the completion of a review by a certified NEO development group, our wallet will be open sourced and released in this repository.
 
 
 ## LootClicker (ALPHA) - Play at http://www.lootclicker.online
