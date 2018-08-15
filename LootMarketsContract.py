@@ -8,10 +8,11 @@ Copyright 2018 LOOT Token Inc. & Warped Gaming LLC
 Author: @poli
 Email: chris.luke.poli@gmail.com
 
-This smart contract enables the creation of marketplaces for games, that is, it
+This smart contract is the foundation of the Loot Framework.
+It enables the creation of marketplaces for games, that is, it
 integrates a storage system for items on the NEO blockchain as "digital assets" where
 they are tradeable for the NEP-5 asset LOOT tied to a fiat value. A marketplace is registered
-with an owner, who has exclusive permissions to invoke the operations on this marketplace.
+with owners, who have exclusive permissions to create and give players assets on this marketplace.
 
 For our proof of concept game LootClicker, this contract includes its first decentralized game mode 
 inspired by the "Battle Royale" genre of games. 
