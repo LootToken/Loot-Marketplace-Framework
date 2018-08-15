@@ -181,13 +181,6 @@ It provides the following functionality:
 
 #### WARNING: Mainnet is available, but please do not use this feature until the wallet code has been thoroughly tested and reviewed by a NGD and/or NEL member. Doing so beforehand could potentially result in a loss of funds. 
 
-### Network Relaying
-
-- Currently anyone will be able to relay a transaction through our wallet if they have the required transaction GAS cost.
-- As transactions under 10 gas are currently free, incentives will be rolled out once testing is completed.
-- An algorithm calculates the network fees in order to cover GAS costs dependent on several factors and in a manageable way with the utility token LOOT.
-- Multiple mechanisms are in place to ensure relayed transactions do not fault under any circumstance.
-- This will be explained in more detail in the whitepaper.
 
 ### Network Order Format
 
@@ -213,45 +206,50 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
 }
 ```
 
-## LootMarketsContract
+# LootMarketsContract
 
-### Explanation of the smart contract
+### Explanation of the exchange part of the smart contract.
 #### This can be verified by reading the source code of the smart contract in this repository.
 
 
 ##### Overview
 
 - We intially wanted to integrate digital assets into LootClicker and saw a potential for targetting a larger audience.
+- The problem we have noticed with some decentralized exchanges and NFT contracts is the speed at which transactions occur. This can be a major inconvinience on the players gaming experience. This is the main reason we decided to build the Loot framework.
 - The main necessity of our smart contract is to act as the backbone of our framework, it allows completely decentralized ownership and the exchange of assets for a token pegged to a fiat value.
-- The utility NEP-5 token contract has been edited to allow easy deposit/withdrawal in and out of the smart contract, in this way funds can be managed by the framework.
-
+- The utility NEP-5 token contract has been edited to allow easy deposit/withdrawal in and out of the smart contract, so that funds can be managed by the framework. This functionality is currently built in to the wallet.
+- Transactions can be relayed by any party, upon mainnet release, this will be a completely open network where anyone can be rewarded for powering the network. The fees are payed out decidedly by publicly viewable algorithms converting gas costs to LOOT fees by several variables.
+- To add to further decentralization on this front-running incentivized network, the framework is currently being extended into many nodes which communicate to eachother to ensure no downtime.
+- In depth details are being documented in our whitepaper which will be released soon.
 
 ##### Marketplace
-- This contract acts a 
+
 - A marketplace is essentially a class of assets in the contract that address/addresses have exclusive ownership over. This means they are able to create and distribute assets to players of their game.
+- A marketplace can be created dynamically at any time by the contract owner, which will immediately give them exclusive market rights.
 - These distributed assets can then be bought, sold, traded and removed by a NEO address.
-- They can be created dynamically at any time by the contract owner, which will immediately give them exclusive market rights.
 - The marketplace owner is someone who has exclusive asset rights over their named marketplace assets.
 - The economic value of these assets is decided upon by the community of an integrated title.
-- It is important to note however this does not allow the marketplace owner to take items from the player at any time.
+- It is important to note however this does not allow the marketplace owner to take items from the player at any time or have any control of the players assets once given.
 
 
 ##### General
 
 - The way our framework functions, a marketplace owner must sign these transactions to let them occur such that everything is ordered correctly. 
+- These orders get packaged into transactions by the framework and distributed in the network, ending up being invoked inside the smart contract for final resolution.
   - While trading is active in the contract, they must have the final say in when a transaction is allowed to occur. 
-  - This is automatically done for the registered marketplace owner when a valid order is posted to ```/add_order/``` on our API and they have signed the parameters with their private key, and attached a signature and public key.
-
+  - This is automatically done for the registered marketplace owner when a valid order is posted to ```/add_order/``` on the API and they have signed the parameters with their private key, also attaching a signature and public key. We can quickly check if they are a marketplace owner by querying the smart contract.
 - As seen in the smart contract, we can verify parameters signed by signatures to ensure all parties involved in the transaction want an order to occur.
 
 ##### Unforseen Occurrence
 For events that can not be predicted we have multiple measures in place.
 
-- It should be noted that in the case of an emergency, we have added methods to allow termination of trading, in which everyone will be able to use functions normally, verified by ```CheckWitness```, but without the fast transactions.
+- It should be noted that in the case of an emergency, we have added methods to allow termination of trading, in which everyone will be able to use functions normally, verified by ```CheckWitness```.
 
 - Our framework contains a fast emergency chain rebuilding method, picking out faulty transactions, if a relayed transaction was ever to fail during the testing stages of development. 
 
 - As orders are signed to exact parameters by a users private key, there is no possible way a user will ever lose their digital assets or tokens. 
+
+- We have multiple measures in place to ensure a faulty transaction or bad actor transaction that is relayed is not sent to a NEO node.
 
 ## Framework API - http://lootmarketplacenode.com:8090/
 
