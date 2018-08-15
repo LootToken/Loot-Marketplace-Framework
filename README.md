@@ -17,6 +17,8 @@ It provides the following functionality:
 - Secure offline wallet creation and saving which includes NEP-2 support.
 - Signing and sending transactions.
 - Claiming and redeeming generated GAS.
+- Address book.
+- Switch between mainnet/testnet/privatenet.
 - Viewing names, stats, descriptions and photos of registered marketplace assets.
 - Viewing prices and balances of system assets and NEP-5 tokens.
 - Tracking the 24 hour change of your balance and individual NEO assets.
