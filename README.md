@@ -10,74 +10,7 @@
 #### https://github.com/LootToken/Loot-Marketplace-Framework/blob/master/LootMarketsContract.py
 #### All framework interaction occurs on our public API listed at the bottom of this document. 
 
-## Wallet 
 
-The LOOT wallet is a tool used to securely store game assets.
-It provides the following functionality:
-
-- Secure offline wallet creation and saving which includes NEP-2 support.
-- Signing and sending transactions.
-- Claiming and redeeming generated GAS.
-- Address book.
-- Switch between mainnet/testnet/privatenet.
-- Viewing names, stats, descriptions and photos of registered marketplace assets.
-- Viewing prices and balances of system assets and NEP-5 tokens.
-- Tracking the 24 hour change of your balance and individual NEO assets.
-- Full interaction with the LOOT Marketplace framework, including trading/buying/selling/removing/cancelling game assets.
-- Two currently registered titles, LootClicker and Project: MEYSA with more to be announced soon.
-- A network monitor for the framework in which all data is publicly queryable.
-
-### Screenshots
-
-![WALLET_1](https://s3.amazonaws.com/loottoken.io/Wallet_1.png)
-
-
-![WALLET_2](https://s3.amazonaws.com/loottoken.io/Wallet_2.png)
-
-
-![WALLET_4](https://s3.amazonaws.com/loottoken.io/Wallet_4.png)
-
-
-### Download Links
-
-#### Wallet release: TBA
-
-- MacOS and Windows wallet builds have been given to NGD and NEL for review. 
-- Upon completion, the download links and source code will be MIT licensed and placed in this repository.
-
-#### WARNING: Mainnet is available, but please do not use this feature until the wallet code has been thoroughly tested and reviewed by a NGD and/or NEL member. Doing so beforehand could potentially result in a loss of funds. 
-
-### Network Relaying
-
-- Currently anyone will be able to relay a transaction through our wallet if they have the required transaction GAS cost.
-- As transactions under 10 gas are currently free, incentives will be rolled out once testing is completed.
-- An algorithm calculates the network fees in order to cover GAS costs dependent on several factors and in a manageable way with the utility token LOOT.
-- Multiple mechanisms are in place to ensure relayed transactions do not fault under any circumstance.
-- This will be explained in more detail in the whitepaper.
-
-### Network Order Format
-
-An order can be sent via a raw string in JSON format in the body of a POST request through the route  ```/add_order/``` to the public API with the following details of what an address would like to do.
-
-- The API spec can be found at the bottom of this page.
-
-NOTE: There is a 5 second timeout between orders for players to discourage spam before fees are introduced.
-
-
-```
-{
-  "operation":       # The operation the maker of this order wants to perform. 
-                      "put_offer,buy_offer,cancel_offer,give_item,remove_item,withdraw"
-  "address":         # The address of the maker of the order.
-  "taker_address":   # Optionally the address the maker of the order specifies.
-  "tokens":          # How many tokens the originator is spending.
-  "item_id":         # The id of the item the maker is performing the operation on. 
-  "marketplace":     # Which marketplace this is occurring on.
-  "signature":       # The signature of this signed order.
-  "public_key":      # The public key of the maker.
-  "salt":            # A unique GUID so that this order may only occur once.
-}
-```
 
 ## LootClicker (ALPHA) - Play at http://www.lootclicker.online
 
@@ -89,6 +22,9 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
 
 
 ![GAME_2](https://s3.amazonaws.com/loottoken.io/ss25.jpg)
+
+
+![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
 
 
 ![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
@@ -200,6 +136,84 @@ Contract call: ``` BR_finish_round [UniqueGameID] ```
 
 - This can be called by anyone and will resolve the round on the condition that; all the players have made an action for the round, or the round has timed out. 
 - If the event is complete, being there is <= 1 player, the smart contract will automatically finish the event and give the prizes to the x amount players as specified in the creation stage.
+
+
+
+
+
+
+
+
+
+
+## Wallet 
+
+The LOOT wallet is a tool used to securely store game assets.
+It provides the following functionality:
+
+- Secure offline wallet creation and saving which includes NEP-2 support.
+- Signing and sending transactions.
+- Claiming and redeeming generated GAS.
+- Address book.
+- Switch between mainnet/testnet/privatenet.
+- Viewing names, stats, descriptions and photos of registered marketplace assets.
+- Viewing prices and balances of system assets and NEP-5 tokens.
+- Tracking the 24 hour change of your balance and individual NEO assets.
+- Full interaction with the LOOT Marketplace framework, including trading/buying/selling/removing/cancelling game assets.
+- Two currently registered titles, LootClicker and Project: MEYSA with more to be announced soon.
+- A network monitor for the framework in which all data is publicly queryable.
+
+### Screenshots
+
+![WALLET_1](https://s3.amazonaws.com/loottoken.io/Wallet_1.png)
+
+
+![WALLET_2](https://s3.amazonaws.com/loottoken.io/Wallet_2.png)
+
+
+![WALLET_4](https://s3.amazonaws.com/loottoken.io/Wallet_4.png)
+
+
+### Download Links
+
+#### Wallet release: TBA
+
+- MacOS and Windows wallet builds have been given to NGD and NEL for review. 
+- Upon completion, the download links and source code will be MIT licensed and placed in this repository.
+
+#### WARNING: Mainnet is available, but please do not use this feature until the wallet code has been thoroughly tested and reviewed by a NGD and/or NEL member. Doing so beforehand could potentially result in a loss of funds. 
+
+### Network Relaying
+
+- Currently anyone will be able to relay a transaction through our wallet if they have the required transaction GAS cost.
+- As transactions under 10 gas are currently free, incentives will be rolled out once testing is completed.
+- An algorithm calculates the network fees in order to cover GAS costs dependent on several factors and in a manageable way with the utility token LOOT.
+- Multiple mechanisms are in place to ensure relayed transactions do not fault under any circumstance.
+- This will be explained in more detail in the whitepaper.
+
+### Network Order Format
+
+An order can be sent via a raw string in JSON format in the body of a POST request through the route  ```/add_order/``` to the public API with the following details of what an address would like to do.
+
+- The API spec can be found at the bottom of this page.
+
+NOTE: There is a 5 second timeout between orders for players to discourage spam before fees are introduced.
+
+
+```
+{
+  "operation":       # The operation the maker of this order wants to perform. 
+                      "put_offer,buy_offer,cancel_offer,give_item,remove_item,withdraw"
+  "address":         # The address of the maker of the order.
+  "taker_address":   # Optionally the address the maker of the order specifies.
+  "tokens":          # How many tokens the originator is spending.
+  "item_id":         # The id of the item the maker is performing the operation on. 
+  "marketplace":     # Which marketplace this is occurring on.
+  "signature":       # The signature of this signed order.
+  "public_key":      # The public key of the maker.
+  "salt":            # A unique GUID so that this order may only occur once.
+}
+```
 
 
 
