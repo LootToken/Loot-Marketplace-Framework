@@ -6,9 +6,9 @@
 
 #### Producers and developers can simply integrate with the network, registering their marketplace in the smart contract. They will then be able to leverage exclusive management rights to their assets, without needing to trust a third party. 
 
-#### The framework and decentralized game modes are built upon our open sourced smart contract.
+#### The framework and decentralized game modes are built upon our open source smart contract.
 #### https://github.com/LootToken/Loot-Marketplace-Framework/blob/master/LootMarketsContract.py
-#### All framework interaction occurs on our public API listed at the bottom of this document. As stated below, once reviewed by a NEO development group our wallet will be open sourced.
+#### All framework interaction occurs on our public API listed at the bottom of this document. As stated below, once reviewed by a certified NEO development group, our wallet will be open sourced.
 
 
 ## LootClicker (ALPHA) - Play at http://www.lootclicker.online
@@ -27,7 +27,7 @@
 
 
 #### Overview
-- LootClicker is our f2p MMO casual clicker game. 
+- LootClicker is a f2p MMO casual clicker game. 
 - It was built from the ground up specifically for the NEO blockchain and as a game to play casually or on the side while trading cryptocurrencies.
 - The centralized aspect of game logic itself is managed by an authoritative server, every action which may effect the in game economy and value of assets is verified and accepted by the server, this will attempt to remove all cheating from the game to properly simulate an in game economy.
 - Players can earn items from crates, or in decentralized game modes. 
@@ -50,8 +50,9 @@ The following features are currently working:
 - Unlock over 100 achievements which yield unique rewards and titles.
 - Enter our first decentralized game mode "Blockchain Royale", all logic is resolved on the blockchain in a smart contract.
 - A friends list, global online chat with channels and private messaging.
-- View the gear and stats of any other player.
+- Search the gear and stats of any other player.
 - Equip pets, cosmetics and weapons to use in battle.
+- Reroll the stats of weapons.
 - Leaderboards for guilds and players.
 - Progress is never lost, and bound to your account/blockchain.
 - A full functioning in game marketplace has been integrated to showcase how assets can be sold, bought and traded on the Loot marketplace framework.
