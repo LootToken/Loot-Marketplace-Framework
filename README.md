@@ -1,6 +1,6 @@
 # LOOT Marketplace Framework
 
-#### We are bringing blockchain gaming to the mainstream, providing a complete and viable solution to digitalizing assets in fast paced large scale commercial games without hindering on the end user.
+#### We are bringing blockchain gaming to the mainstream, providing a complete and viable solution to digitalizing assets in fast paced large scale commercial games without hindering the end user.
 
 #### At it's core we are targeting the gaming industry; allowing the trading of digitalized assets instantly and securely for the end user, through the utilization of the NEO blockchain, smart contracts and a front-running relaying network. 
 
@@ -52,11 +52,11 @@ It provides the following functionality:
 - Multiple mechanisms are in place to ensure relayed transactions do not fault under any circumstance.
 - This will be explained in more detail in the whitepaper.
 
-## Framework API - http://lootmarketplacenode.com:8090/
-
 ### Network Order Format
 
 An order can be sent via a raw string in JSON format in the body of a POST request through the route  ```/add_order/``` to the public API with the following details of what an address would like to do.
+
+- The API spec can be found at the bottom of this page.
 
 NOTE: There is a 5 second timeout between orders for players to discourage spam before fees are introduced.
 
@@ -76,7 +76,132 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
 }
 ```
 
+## LootClicker (ALPHA) - Play at http://www.lootclicker.online
 
+
+- For more information and screenshots please visit http://www.loottoken.io/lootclicker
+
+
+![GAME_1](https://s3.amazonaws.com/loottoken.io/lc_1.png)
+
+
+![GAME_2](https://s3.amazonaws.com/loottoken.io/idle_3.jpg)
+
+
+![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
+
+
+
+##### NOTE: As we are in alpha testing, only whitelisted emails will be able to register and login. You can sign up for this on our website at LootToken.io
+
+#### Overview
+- LootClicker is our proof of concept MMO casual clicker game. 
+- It was designed as a game to play casually or on the side while trading cryptocurrencies.
+- Players can earn items from crates, or in decentralized game modes. 
+- The centralized aspect of game logic itself is managed by an authoritative server, every action which may effect the in game economy and value of assets is verified and accepted by the server, this will attempt to remove all cheating from the game to properly simulate an in game economy.
+- The in game equipable assets are all integrated into the framework and therefore registered on the NEO blockchain.
+
+#### Game Features
+
+The following features are currently working:
+
+- Singleplayer mode in which the player can fight enemies and defeat powerful bosses to advance stages.
+- Offline bounty (soft currency) and experience generation that is claimed upon login, this is scaled dependent on your idle damage and stage.
+- Find rare gems in combat that can be spent to perform actions such as creating guilds, starting events and rerolling your class.
+- In game digital assets all are given stats and/or abilities according to their rarity along with unique sounds and effects.
+- There are 7 weapon classes to use, equipping a weapon class with give you an additional active skill to use in combat.
+- Unlock mercenaries with bounty in single player mode that will increase damage output.
+- At level 100+ you can "Server Hop". You will gain passive bonuses and be able to unlock active/passive skills, but in turn will be stripped of your current rank, currency and stage.
+- At higher levels you may choose and unlock from 3 talent classes; beserker, specialist and lawless. These each have their own unique active and passive skills. 
+- Join a guild, with up to 50 members to chat, rank up, and complete timed events to earn rewards.
+- Daily rewards can be collected on a login streak over 30 days.
+- Unlock over 100 achievements which yield unique rewards and titles.
+- Enter our first decentralized game mode "Blockchain Royale", all logic is resolved on the blockchain in a smart contract.
+- A friends list, global online chat with channels and private messaging.
+- View the gear and stats of any other player.
+- Equip pets, cosmetics and weapons to use in battle.
+- Reroll the stats of weapons.
+- Leaderboards for guilds and players.
+- Progress is never lost, and bound to your account/blockchain.
+- A full functioning in game marketplace has been integrated to showcase how assets can be sold, bought and traded on the marketplace framework.
+
+#### Accessing LootClicker items in the wallet
+- You may register an account with a pre-existing private key, or else a new one will be created for you.
+  - You can copy this private key, and with it log into the wallet with the first option on the menu.
+  - In the "Settings", you can click "Save Wallet" to enable easy access into the wallet where you can access your items.
+- Any items in your wallet are cross synced with an integrated game, so purchased marketplace items in the wallet will be available for use in LootClicker without an effort on the players part.
+
+### Next release - Patch 1.1
+
+We aim to have the following released by the next patch as we transition into open beta.
+
+- Fixing any residual alpha bugs.
+- Standalone builds for mac/pc. 
+- Add new cosmetics, mercenaries and items.
+- Perfect the in game scaling algorithms for the best player experience.
+- Support for WebGL uploading profile pictures.
+- Android/Mac build begins.
+
+## Decentralized Game Modes
+
+### Blockchain Royale
+
+![BR_1](https://s3.amazonaws.com/loottoken.io/br_mode.jpg)
+
+As part of the NEO-Game competition, we wanted to showcase the potential of what a smart contract is capable of. We have decided to release our first decentralized game mode based on the popular "Battle Royale" gamemode. 
+
+- Every single action of this game mode is decided and resolved inside the smart contract and output through ```Notify``` events which are relayed to the game including:
+
+  - Movement 
+  - Map boundaries
+  - Random in game events 
+  - Timeouts
+  - Looting and fighting 
+  - Giving out rewards to winners
+
+- Important game information which is caught from the ```Notify``` events is publicly queryable through the API calls listed.
+
+
+#### Phases
+
+##### Creation: 
+Contract call: ``` BR_create [UniqueGameID,Address,Marketplace,Items] ```
+- A marketplace owner may create an event, and pass in x rewards, which will be given to the last x players of the match.
+
+##### Sign Up: 
+Contract call: ``` BR_sign_up [UniqueGameID,Address] ```
+- Players may sign up to the event, this registers them into the event in the smart contract itself.
+
+##### Start: 
+Contract call: ``` BR_start [UniqueGameID,Address] ```
+- The owner of the event can start the event, each round has a timeout period, in which players who do not move will be eliminated.
+
+##### Round 0 (Landing):
+Contract call: ``` BR_choose_initial_zone [UniqueGameID,Address,Zone] ```
+
+- The player can "spawn" in, choosing a zone to initially be on, if it is in the constraints of the grid created.
+
+##### Round 1+: 
+Contract call: ``` BR_do_action [UniqueGameID,Address,Action,Direction] ```
+
+A registered and not yet eliminated address may do one of the following recognized actions each round:
+  - "Move","Hide","Loot". 
+    - If a player is hiding, they have the advantage, 60% chance to win.
+    - If a player is looting, they can find untradeable in game items in their current zone, although this will yield a disadvantage, a 40% chance to win.
+    - A player can move to a square, 40 % chance to win.
+    - If percentages are the same, it will go to a 50-50 roll.
+  - To encourage movement and unique gameplay, after round 4, every round a new side of the grid map will be randomly chosen to be destroyed. This event is notified and will be seen in game.
+
+##### Finish Round:
+Contract call: ``` BR_finish_round [UniqueGameID] ```
+
+- This can be called by anyone and will resolve the round on the condition that; all the players have made an action for the round, or the round has timed out. 
+- If the event is complete, being there is <= 1 player, the smart contract will automatically finish the event and give the prizes to the x amount players as specified in the creation stage.
+
+
+
+
+## Framework API - http://lootmarketplacenode.com:8090/
 
 ### Framework API Routes
 
@@ -377,127 +502,7 @@ Response body:
 
 
 
-## LootClicker (ALPHA) - Play at http://www.lootclicker.online
 
-
-- For more information and screenshots please visit http://www.loottoken.io/lootclicker
-
-
-![GAME_1](https://s3.amazonaws.com/loottoken.io/lc_1.png)
-
-
-![GAME_2](https://s3.amazonaws.com/loottoken.io/idle_3.jpg)
-
-
-![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
-
-
-
-##### NOTE: As we are in alpha testing, only whitelisted emails will be able to register and login. You can sign up for this on our website at LootToken.io
-
-#### Overview
-- LootClicker is our proof of concept MMO casual clicker game. 
-- It was designed as a game to play casually or on the side while trading cryptocurrencies.
-- Players can earn items from crates, or in decentralized game modes. 
-- The centralized aspect of game logic itself is managed by an authoritative server, every action which may effect the in game economy and value of assets is verified and accepted by the server, this will attempt to remove all cheating from the game to properly simulate an in game economy.
-- The in game equipable assets are all integrated into the framework and therefore registered on the NEO blockchain.
-
-#### Game Features
-
-The following features are currently working:
-
-- Singleplayer mode in which the player can fight enemies and defeat powerful bosses to advance stages.
-- Offline bounty (soft currency) and experience generation that is claimed upon login, this is scaled dependent on your idle damage and stage.
-- Find rare gems in combat that can be spent to perform actions such as creating guilds, starting events and rerolling your class.
-- In game digital assets all are given stats and/or abilities according to their rarity along with unique sounds and effects.
-- There are 7 weapon classes to use, equipping a weapon class with give you an additional active skill to use in combat.
-- Unlock mercenaries with bounty in single player mode that will increase damage output.
-- At level 100+ you can "Server Hop". You will gain passive bonuses and be able to unlock active/passive skills, but in turn will be stripped of your current rank, currency and stage.
-- At higher levels you may choose and unlock from 3 talent classes; beserker, specialist and lawless. These each have their own unique active and passive skills. 
-- Join a guild, with up to 50 members to chat, rank up, and complete timed events to earn rewards.
-- Daily rewards can be collected on a login streak over 30 days.
-- Unlock over 100 achievements which yield unique rewards and titles.
-- Enter our first decentralized game mode "Blockchain Royale", all logic is resolved on the blockchain in a smart contract.
-- A friends list, global online chat with channels and private messaging.
-- View the gear and stats of any other player.
-- Equip pets, cosmetics and weapons to use in battle.
-- Reroll the stats of weapons.
-- Leaderboards for guilds and players.
-- Progress is never lost, and bound to your account/blockchain.
-- A full functioning in game marketplace has been integrated to showcase how assets can be sold, bought and traded on the marketplace framework.
-
-#### Accessing LootClicker items in the wallet
-- You may register an account with a pre-existing private key, or else a new one will be created for you.
-  - You can copy this private key, and with it log into the wallet with the first option on the menu.
-  - In the "Settings", you can click "Save Wallet" to enable easy access into the wallet where you can access your items.
-- Any items in your wallet are cross synced with an integrated game, so purchased marketplace items in the wallet will be available for use in LootClicker without an effort on the players part.
-
-### Next release - Patch 1.1
-
-We aim to have the following released by the next patch as we transition into open beta.
-
-- Fixing any residual alpha bugs.
-- Standalone builds for mac/pc. 
-- Add new cosmetics, mercenaries and items.
-- Perfect the in game scaling algorithms for the best player experience.
-- Support for WebGL uploading profile pictures.
-- Android/Mac build begins.
-
-## Decentralized Game Modes
-
-### Blockchain Royale
-
-![BR_1](https://s3.amazonaws.com/loottoken.io/br_mode.jpg)
-
-As part of the NEO-Game competition, we wanted to showcase the potential of what a smart contract is capable of. We have decided to release our first decentralized game mode based on the popular "Battle Royale" gamemode. 
-
-- Every single action of this game mode is decided and resolved inside the smart contract and output through ```Notify``` events which are relayed to the game including:
-
-  - Movement 
-  - Map boundaries
-  - Random in game events 
-  - Timeouts
-  - Looting and fighting 
-  - Giving out rewards to winners
-
-- Important game information which is caught from the ```Notify``` events is publicly queryable through the API calls listed.
-
-
-#### Phases
-
-##### Creation: 
-Contract call: ``` BR_create [UniqueGameID,Address,Marketplace,Items] ```
-- A marketplace owner may create an event, and pass in x rewards, which will be given to the last x players of the match.
-
-##### Sign Up: 
-Contract call: ``` BR_sign_up [UniqueGameID,Address] ```
-- Players may sign up to the event, this registers them into the event in the smart contract itself.
-
-##### Start: 
-Contract call: ``` BR_start [UniqueGameID,Address] ```
-- The owner of the event can start the event, each round has a timeout period, in which players who do not move will be eliminated.
-
-##### Round 0 (Landing):
-Contract call: ``` BR_choose_initial_zone [UniqueGameID,Address,Zone] ```
-
-- The player can "spawn" in, choosing a zone to initially be on, if it is in the constraints of the grid created.
-
-##### Round 1+: 
-Contract call: ``` BR_do_action [UniqueGameID,Address,Action,Direction] ```
-
-A registered and not yet eliminated address may do one of the following recognized actions each round:
-  - "Move","Hide","Loot". 
-    - If a player is hiding, they have the advantage, 60% chance to win.
-    - If a player is looting, they can find untradeable in game items in their current zone, although this will yield a disadvantage, a 40% chance to win.
-    - A player can move to a square, 40 % chance to win.
-    - If percentages are the same, it will go to a 50-50 roll.
-  - To encourage movement and unique gameplay, after round 4, every round a new side of the grid map will be randomly chosen to be destroyed. This event is notified and will be seen in game.
-
-##### Finish Round:
-Contract call: ``` BR_finish_round [UniqueGameID] ```
-
-- This can be called by anyone and will resolve the round on the condition that; all the players have made an action for the round, or the round has timed out. 
-- If the event is complete, being there is <= 1 player, the smart contract will automatically finish the event and give the prizes to the x amount players as specified in the creation stage.
 
 
 ## Acknowledgements
