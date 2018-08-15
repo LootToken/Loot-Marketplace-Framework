@@ -34,7 +34,8 @@
 
 
 
-##### NOTE: As we are in alpha testing, only whitelisted emails will be able to register and login. You can sign up for this on our website at LootToken.io
+#### NOTE: As we are in alpha testing, only whitelisted emails will be able to register and login. We have sent accounts to the judges of the NEO Game competition and download links to the wallet. 
+You can sign up for this on our website at LootToken.io
 
 #### Overview
 - LootClicker is our proof of concept MMO casual clicker game. 
@@ -62,7 +63,6 @@ The following features are currently working:
 - A friends list, global online chat with channels and private messaging.
 - View the gear and stats of any other player.
 - Equip pets, cosmetics and weapons to use in battle.
-- Reroll the stats of weapons.
 - Leaderboards for guilds and players.
 - Progress is never lost, and bound to your account/blockchain.
 - A full functioning in game marketplace has been integrated to showcase how assets can be sold, bought and traded on the marketplace framework.
@@ -90,18 +90,28 @@ We aim to have the following released by the next patch as we transition into op
 
 ![BR_1](https://s3.amazonaws.com/loottoken.io/br_mode.jpg)
 
-As part of the NEO-Game competition, we wanted to showcase the potential of what a smart contract is capable of. We have decided to release our first decentralized game mode based on the popular "Battle Royale" gamemode. 
+As a part of the NEO-Game competition, we wanted to showcase the potential of what a smart contract is capable of. We have decided to release our first decentralized game mode based on the popular "Battle Royale" gamemode. 
 
+- For a player to perform an action, they must sign and send an invocation transaction with their private key and the required parameters of what they want to do.
 - Every single action of this game mode is decided and resolved inside the smart contract and output through ```Notify``` events which are relayed to the game including:
 
-  - Movement 
-  - Map boundaries
-  - Random in game events 
-  - Timeouts
-  - Looting and fighting 
-  - Giving out rewards to winners
+  - Movement: moving in a direction along the map.
+  - Map boundaries: where the player is allowed to move.
+  - Random in game events: areas on the map being randomly marked off and destroyed.
+  - Timeouts: inactive players can be removed.
+  - Looting and fighting: this can be randomly decided on the blockchain fairly and publicly.
+  - Giving out rewards to winners: the smart contract can be programmed to give rewards based on conditions.
 
-- Important game information which is caught from the ```Notify``` events is publicly queryable through the API calls listed.
+
+- Smart contracts are able to emit ```Notify``` events so we know what occurred on the blockchain such as from our contract:
+```
+details = ["BR", event_code,"BR_sign_up",address, result]
+Notify(details)
+```  
+Here we can see that an address has signed up, and what the result was.
+
+- Important game information is caught by our API, stored and able to be publicly queryable through the API calls listed below.
+- We can then show the player game logic based on the results decided in a smart contract by querying these logs back in order.
 
 
 #### Phases
@@ -139,14 +149,6 @@ Contract call: ``` BR_finish_round [UniqueGameID] ```
 
 - This can be called by anyone and will resolve the round on the condition that; all the players have made an action for the round, or the round has timed out. 
 - If the event is complete, being there is <= 1 player, the smart contract will automatically finish the event and give the prizes to the x amount players as specified in the creation stage.
-
-
-
-
-
-
-
-
 
 
 ## Wallet 
