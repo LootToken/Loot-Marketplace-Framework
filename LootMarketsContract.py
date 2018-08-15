@@ -421,68 +421,75 @@ def Main(operation, args):
             return result
 
         if operation == "BR_sign_up":
-            event_code = args[0]
-            address = args[1]
+            if len(args) == 2:
+                event_code = args[0]
+                address = args[1]
 
-            result = BR_sign_up(event_code,address)
-            details = ["BR", event_code,"BR_sign_up",address, result]
-            Notify(details)
-            return result
+                result = BR_sign_up(event_code,address)
+                details = ["BR", event_code,"BR_sign_up",address, result]
+                Notify(details)
+                return result
 
         if operation == "BR_start":
-            event_code = args[0]
-            address = args[1]
+            if len(args) == 2:
+                event_code = args[0]
+                address = args[1]
 
-            result = BR_start(event_code,address)
+                result = BR_start(event_code,address)
 
-            details = ["BR",event_code,"BR_start",address,result]
-            Notify(details)
+                details = ["BR",event_code,"BR_start",address,result]
+                Notify(details)
 
-            return result
+                return result
 
         if operation == "BR_choose_initial_zone":
-            event_code = args[0]
-            address = args[1]
-            zone = args[2]
+            if len(args) == 3:
+                event_code = args[0]
+                address = args[1]
+                zone = args[2]
 
-            # The first action which will be resolved the next round.
-            return BR_choose_initial_grid_position(event_code, address,zone)
+                # The first action which will be resolved the next round.
+                return BR_choose_initial_grid_position(event_code, address,zone)
 
         if operation == "BR_do_action":
-            event_code = args[0]
-            address = args[1]
-            action = args[2]
-            direction = args[3]
+            if len(args) == 4:
+                event_code = args[0]
+                address = args[1]
+                action = args[2]
+                direction = args[3]
 
-            return BR_do_action(event_code, address, action, direction)
+                return BR_do_action(event_code, address, action, direction)
 
         if operation == "BR_finish_round":
-            event_code = args[0]
-            return BR_finish_round(event_code)
+            if len(args) == 1:
+                event_code = args[0]
+                return BR_finish_round(event_code)
 
 
         if operation == "BR_get_leaderboard":
-
-            context = GetContext()
-
-            event_code = args[0]
-            leaderboard = get_BR_leaderboard(context,event_code)
-            if leaderboard != b'':
-                leaderboard = Deserialize(leaderboard)
-            else:
-                leaderboard = []
-            payload = ["BR",event_code,'leaderboard',leaderboard]
-            Notify(payload)
-            return True
+            
+            if len(args) == 1:
+                context = GetContext()
+                
+                event_code = args[0]
+                leaderboard = get_BR_leaderboard(context,event_code)
+                if leaderboard != b'':
+                    leaderboard = Deserialize(leaderboard)
+                else:
+                    leaderboard = []
+                payload = ["BR",event_code,'leaderboard',leaderboard]
+                Notify(payload)
+                return True
 
         if operation == "BR_get_event_details":
-            context = GetContext()
-
-            event_code = args[0]
-            event_details = get_BR_event_details(context,event_code)
-            payload = ["BR",event_code,"event_details",event_details]
-            Notify(payload)
-            return True
+            if len(args) == 1:
+                context = GetContext()
+                
+                event_code = args[0]
+                event_details = get_BR_event_details(context,event_code)
+                payload = ["BR",event_code,"event_details",event_details]
+                Notify(payload)
+                return True
 
         return False
 
