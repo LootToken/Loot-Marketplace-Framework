@@ -379,6 +379,7 @@ Response body:
 
 ## LootClicker (ALPHA) - Play at http://www.lootclicker.online
 
+
 - For more information and screenshots please visit http://www.loottoken.io/lootclicker
 
 
@@ -396,6 +397,7 @@ Response body:
 
 #### Overview
 - LootClicker is our proof of concept MMO casual clicker game. 
+- It was designed as a game to play casually or on the side while trading cryptocurrencies.
 - Players can earn items from crates, or in decentralized game modes. 
 - The centralized aspect of game logic itself is managed by an authoritative server, every action which may effect the in game economy and value of assets is verified and accepted by the server, this will attempt to remove all cheating from the game to properly simulate an in game economy.
 - The in game equipable assets are all integrated into the framework and therefore registered on the NEO blockchain.
@@ -419,6 +421,7 @@ The following features are currently working:
 - A friends list, global online chat with channels and private messaging.
 - View the gear and stats of any other player.
 - Equip pets, cosmetics and weapons to use in battle.
+- Reroll the stats of weapons.
 - Leaderboards for guilds and players.
 - Progress is never lost, and bound to your account/blockchain.
 - A full functioning in game marketplace has been integrated to showcase how assets can be sold, bought and traded on the marketplace framework.
