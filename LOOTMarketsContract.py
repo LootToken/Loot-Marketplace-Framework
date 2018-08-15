@@ -12,9 +12,9 @@ they are trade-able for the NEP-5 asset LOOT tied to a fiat value. A marketplace
 with an owner, who has exclusive permissions to invoke the operations on this marketplace.
 This system is immutable, secure, fee-less and without third party.
 
-For our proof of concept game LootClicker it also provides the ability to integrate this
-marketplace and compete in completely decentralized game modes. Our first game mode,
-a twist on the "Battle Royale" genre is an example of this.
+For our proof of concept game LootClicker, this contract includes its first decentralized game mode 
+inspired by the "Battle Royale" genre of games. 
+All aspects of game logic are decided in this contract and it aims to show what a NEO smart contract is capable of.
 
 Author: @poli
 Email: chris.luke.poli@gmail.com
