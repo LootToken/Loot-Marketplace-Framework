@@ -6,8 +6,11 @@
 
 #### Producers and developers can simply integrate with the network, registering their marketplace in the smart contract. They will then be able to leverage exclusive management rights to their assets, without needing to trust a third party. 
 
-#### For more information or to get in contact with the team visit: http://www.loottoken.io/
+#### The framework and decentralized game modes are built upon our open sourced smart contract.
+#### https://github.com/LootToken/Loot-Marketplace-Framework/blob/master/LootMarketsContract.py
 
+
+#### For more information or to get in contact with the team visit: http://www.loottoken.io/
 
 ## Wallet 
 
