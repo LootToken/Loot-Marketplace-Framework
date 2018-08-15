@@ -27,7 +27,10 @@
 ![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
 
 
-![GAME_3](https://s3.amazonaws.com/loottoken.io/combat_demo.jpg)
+![GAME_4](https://s3.amazonaws.com/loottoken.io/inventory_newest.jpg)
+
+
+![GAME_5](https://s3.amazonaws.com/loottoken.io/market_newest.jpg)
 
 
 
