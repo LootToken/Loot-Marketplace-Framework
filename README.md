@@ -178,9 +178,9 @@ It provides the following functionality:
 
 #### Overview
 
-- We intially wanted to integrate digital assets into LootClicker and saw a potential for targetting a larger audience.
-- The problem we have noticed with some decentralized exchanges and NFT contracts is the speed at which transactions occur. This can be a major inconvinience on the players gaming experience and is the main reason we decided to build the Loot framework.
-- The main necessity of our smart contract is to act as the backbone of our framework, it allows completely decentralized ownership and the exchange of assets for a token pegged to a fiat value. 
+- We intially wanted to integrate digital assets into LootClicker and saw a potential for targeting a larger audience.
+- The problem we have noticed with some decentralized exchanges and NFT contracts is the speed at which transactions occur. This can be a major inconvenience on a players gaming experience and is the main reason we decided to build the Loot framework.
+- The main necessity of our smart contract is to act as the foundation of our framework, it allows completely decentralized ownership and the exchange of assets for a token pegged to a fiat value. 
 - The utility NEP-5 token contract has been slightly edited to allow deposit/withdrawal in and out of the smart contract, so that funds can be managed by the framework. This functionality is currently built in to the wallet.
 - Transactions can be relayed by any party, upon mainnet release, this will be a completely open network where anyone can be rewarded for powering the network. The fees are payed out decidedly by publicly viewable algorithms converting gas costs to LOOT fees by several variables.
 - To add to further decentralization on this front-running incentivized network, the framework is currently being extended into many nodes which communicate to eachother to ensure no downtime.
@@ -189,9 +189,8 @@ It provides the following functionality:
 ##### Marketplace
 
 - A marketplace defined in our smart contract is essentially a class of assets in the contract that address/addresses have exclusive ownership over. This means they are able to create and distribute assets to players of their game.
-- A marketplace can be created dynamically at any time by the contract owner, which will immediately give them exclusive market rights.
-- These distributed assets can then be bought, sold, traded and removed by a NEO address.
-- The marketplace owner is someone who has exclusive asset rights over their named marketplace assets.
+- These distributed assets can then be bought, sold, traded and/or removed by a NEO address.
+- A marketplace can be created dynamically at any time by the contract owner, which will immediately give them exclusive asset rights over their named marketplace assets.
 - The economic value of these assets is decided upon by the community of an integrated title.
 - It is important to note however this does not allow the marketplace owner to take items from the player at any time or have any control of the players assets once given to them.
 
@@ -200,7 +199,7 @@ It provides the following functionality:
 - The way our framework functions, a marketplace owner must sign these transactions to let them occur such that everything is ordered correctly. 
 - These orders get packaged into transactions by the framework and distributed to the network and end up being invoked inside the smart contract for final resolution.
   - While trading is active in the contract, they must have the final say in when a transaction is allowed to occur. 
-  - This is automatically done for the registered marketplace owner when a valid order is posted to ```/add_order/``` on the API and they have signed the parameters with their private key, also attaching a signature and public key. We can quickly check if they are a marketplace owner by querying the smart contract.
+  - This is automatically done for the registered marketplace owner when a valid order is posted to ```/add_order/``` through the API, on the condition they have signed the parameters with their private key, attaching this signature and their public key. We can quickly check if they are a marketplace owner by querying the smart contract.
 - As seen in the smart contract, we can verify parameters signed by private keys to ensure all parties involved in the transaction want an order to occur.
 
 ##### Unforseen Occurrence
