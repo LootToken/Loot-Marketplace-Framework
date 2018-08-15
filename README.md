@@ -8,15 +8,14 @@
 
 #### The framework and decentralized game modes are built upon our open sourced smart contract.
 #### https://github.com/LootToken/Loot-Marketplace-Framework/blob/master/LootMarketsContract.py
-#### All framework interaction occurs on our public API listed at the bottom of this document. 
-#### As stated below, once reviewed by a NEO development group our wallet will be open sourced.
+#### All framework interaction occurs on our public API listed at the bottom of this document. As stated below, once reviewed by a NEO development group our wallet will be open sourced.
 
 
 ## LootClicker (ALPHA) - Play at http://www.lootclicker.online
 
 
-### NOTE: As we are in alpha testing, only whitelisted emails will be able to register and login. 
-### We have sent accounts and download links to the wallet to the judges of the NEO Game competition. 
+##### NOTE: As we are in alpha testing, only whitelisted emails will be able to register and login. We have sent accounts and wallets to the judges of the NEO Game competition. You can sign up for this on our website.
+
 
 ![GAME_1](https://s3.amazonaws.com/loottoken.io/lc_1.png)
 
@@ -32,8 +31,6 @@
 
 ![GAME_5](https://s3.amazonaws.com/loottoken.io/market_newest.jpg)
 
-
-You can sign up for this on our website at LootToken.io
 
 #### Overview
 - LootClicker is our proof of concept MMO casual clicker game. 
@@ -180,9 +177,7 @@ It provides the following functionality:
 ### Download Links
 
 #### Wallet release: TBA
-
-- MacOS and Windows wallet builds have been given to NGD and NEL for review. 
-- Upon completion, the download links and source code will be MIT licensed and placed in this repository.
+- Upon completion of code review by a NEO development group, the download links and source code will be MIT licensed and placed in this repository.
 
 #### WARNING: Mainnet is available, but please do not use this feature until the wallet code has been thoroughly tested and reviewed by a NGD and/or NEL member. Doing so beforehand could potentially result in a loss of funds. 
 
@@ -196,7 +191,7 @@ It provides the following functionality:
 
 ### Network Order Format
 
-An order can be sent via a raw string in JSON format in the body of a POST request through the route  ```/add_order/``` to the public API with the following details of what an address would like to do.
+An order can be sent via a raw string in JSON format in the body of a POST request through the route  ```/add_order/``` to the public API with the following details of what order an address would like to place.
 
 - The API spec can be found at the bottom of this page.
 
@@ -218,8 +213,45 @@ NOTE: There is a 5 second timeout between orders for players to discourage spam 
 }
 ```
 
+## LootMarketsContract
+
+### Explanation of the smart contract
+#### This can be verified by reading the source code of the smart contract in this repository.
 
 
+##### Overview
+
+- We intially wanted to integrate digital assets into LootClicker and saw a potential for targetting a larger audience.
+- The main necessity of our smart contract is to act as the backbone of our framework, it allows completely decentralized ownership and the exchange of assets for a token pegged to a fiat value.
+- The utility NEP-5 token contract has been edited to allow easy deposit/withdrawal in and out of the smart contract, in this way funds can be managed by the framework.
+
+
+##### Marketplace
+- This contract acts a 
+- A marketplace is essentially a class of assets in the contract that address/addresses have exclusive ownership over. This means they are able to create and distribute assets to players of their game.
+- These distributed assets can then be bought, sold, traded and removed by a NEO address.
+- They can be created dynamically at any time by the contract owner, which will immediately give them exclusive market rights.
+- The marketplace owner is someone who has exclusive asset rights over their named marketplace assets.
+- The economic value of these assets is decided upon by the community of an integrated title.
+- It is important to note however this does not allow the marketplace owner to take items from the player at any time.
+
+
+##### General
+
+- The way our framework functions, a marketplace owner must sign these transactions to let them occur such that everything is ordered correctly. 
+  - While trading is active in the contract, they must have the final say in when a transaction is allowed to occur. 
+  - This is automatically done for the registered marketplace owner when a valid order is posted to ```/add_order/``` on our API and they have signed the parameters with their private key, and attached a signature and public key.
+
+- As seen in the smart contract, we can verify parameters signed by signatures to ensure all parties involved in the transaction want an order to occur.
+
+##### Unforseen Occurrence
+For events that can not be predicted we have multiple measures in place.
+
+- It should be noted that in the case of an emergency, we have added methods to allow termination of trading, in which everyone will be able to use functions normally, verified by ```CheckWitness```, but without the fast transactions.
+
+- Our framework contains a fast emergency chain rebuilding method, picking out faulty transactions, if a relayed transaction was ever to fail during the testing stages of development. 
+
+- As orders are signed to exact parameters by a users private key, there is no possible way a user will ever lose their digital assets or tokens. 
 
 ## Framework API - http://lootmarketplacenode.com:8090/
 
