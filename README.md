@@ -8,9 +8,7 @@
 
 #### The framework and decentralized game modes are built upon our open sourced smart contract.
 #### https://github.com/LootToken/Loot-Marketplace-Framework/blob/master/LootMarketsContract.py
-
-
-#### For more information or to get in contact with the team visit: http://www.loottoken.io/
+#### All framework interaction occurs on our public API listed at the bottom of this document. 
 
 ## Wallet 
 
