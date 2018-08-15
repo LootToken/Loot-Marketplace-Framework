@@ -1,10 +1,9 @@
 """
-=====================================================================================
-===== LootMarketExchange.py =====
+===== LootMarketExchange =====
 
 MIT License
 
-Copyright 2018 LOOT Token Inc.
+Copyright 2018 LOOT Token Inc. & Warped Gaming LLC
 
 This smart contract enables the creation of marketplaces for games, that is, it
 integrates a storage system for items on the NEO blockchain as "digital assets" where
