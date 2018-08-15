@@ -7,9 +7,8 @@ Copyright 2018 LOOT Token Inc. & Warped Gaming LLC
 
 This smart contract enables the creation of marketplaces for games, that is, it
 integrates a storage system for items on the NEO blockchain as "digital assets" where
-they are trade-able for the NEP-5 asset LOOT tied to a fiat value. A marketplace is registered
+they are tradeable for the NEP-5 asset LOOT tied to a fiat value. A marketplace is registered
 with an owner, who has exclusive permissions to invoke the operations on this marketplace.
-This system is immutable, secure, fee-less and without third party.
 
 For our proof of concept game LootClicker, this contract includes its first decentralized game mode 
 inspired by the "Battle Royale" genre of games. 
