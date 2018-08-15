@@ -739,7 +739,7 @@ def remove_item_verified(marketplace, address, item_id, salt, owner_address,
 
 def verify_order(address,signature,public_key,args):
     """
-    Must verify that an orer is properly signed or it can not occur.
+    Must verify that an order is properly signed or it can not occur.
     """
 
     message = ""
