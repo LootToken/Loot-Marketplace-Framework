@@ -35,7 +35,7 @@
 
 #### Game Features
 
-The following features are currently working:
+A list of some of the features that are currently working:
 
 - Singleplayer mode in which the player can fight enemies and defeat powerful bosses to advance stages.
 - Offline bounty (soft currency) and experience generation that is claimed upon login, this is scaled dependent on your idle damage and stage.
