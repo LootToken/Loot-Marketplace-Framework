@@ -1,25 +1,19 @@
 """
 ===== LootMarketExchange =====
-
 MIT License
-
 Copyright 2018 LOOT Token Inc. & Warped Gaming LLC
-
 This smart contract enables the creation of marketplaces for games, that is, it
 integrates a storage system for items on the NEO blockchain as "digital assets" where
 they are tradeable for the NEP-5 asset LOOT tied to a fiat value. A marketplace is registered
 with an owner, who has exclusive permissions to invoke the operations on this marketplace.
-
 For our proof of concept game LootClicker, this contract includes its first decentralized game mode 
 inspired by the "Battle Royale" genre of games. 
 All aspects of game logic are decided in this contract and it aims to show what a NEO smart contract is capable of.
-
 Author: @poli
 Email: chris.luke.poli@gmail.com
-
 """
 
-from boa.builtins import concat, list, range, take, substr, verify_signature,sha256,hash160,hash256
+from boa.builtins import concat, list, range, take, substr, verify_signature, sha256, hash160, hash256
 from boa.interop.System.ExecutionEngine import GetScriptContainer, GetExecutingScriptHash, GetCallingScriptHash,GetEntryScriptHash
 from boa.interop.Neo.Transaction import Transaction, TransactionInput, GetReferences, GetOutputs, GetUnspentCoins,GetAttributes, GetInputs
 from boa.interop.Neo.Output import GetValue, GetAssetId, GetScriptHash
@@ -43,13 +37,12 @@ LootTokenHash = b'i\x9b\xf7\x17L\xd7\x0f\xbe\xea\xe4\xc5R\xe7\xb0\xddX\x8a\x89\x
 # Register the hash of the NEP-5 LOOT token contract to enable cross contract operations.
 LootContract = RegisterAppCall('cbca898a58ddb0e752c5e4eabe0fd74c17f79b69', 'operation', 'args')
 
-
 # Storage keys
-contract_state_key = b'State'     # Stores the state of the contract.
-inventory_key = b'Inventory'      # The inventory of an address.
+contract_state_key = b'State'  # Stores the state of the contract.
+inventory_key = b'Inventory'  # The inventory of an address.
 marketplace_key = b'Marketplace'  # The owner of a marketplace
-offers_key = b'Offers'            # All the offers available on a marketplace.
-order_key = b'Order'              # Mark an order as complete so it is not completed.
+offers_key = b'Offers'  # All the offers available on a marketplace.
+order_key = b'Order'  # Mark an order as complete so it is not completed.
 
 # Fee variables
 feeFactor = 10000
@@ -57,14 +50,13 @@ MAX_FEE = 10000000
 
 # Contract States
 TERMINATED = b'\x01'  # Anyone may do any core operations without owners permission e.g. emergency button.
-PENDING = b'\x02'     # The contract needs to be initialized before trading is opened.
-ACTIVE = b'\03'       # All operations are active and managed by the LOOT Marketplace framework.
-
+PENDING = b'\x02'  # The contract needs to be initialized before trading is opened.
+ACTIVE = b'\03'  # All operations are active and managed by the LOOT Marketplace framework.
 
 # endregion
 
-#region Decentralized Game variables
 
+# region Decentralized Game variables
 
 # Stores the rewards that competition owner has placed.
 battle_royale_rewards_key = b'BattleRoyaleRewards'
@@ -89,10 +81,10 @@ BR_CHANCE_TO_FIND_LOOT = 5
 BR_CHANCE_INCREASE_PER_ROUND = 5
 # The round will timeout after 10 blocks.
 BR_ROUND_TIMEOUT = 10
-BR_UNTRADEABLE_REWARDS = ["Gem","Ammo","Crate","Bounty"]
+BR_UNTRADEABLE_REWARDS = ["Gem", "Ammo", "Crate", "Bounty"]
 
+# endregion
 
-#endregion
 
 def Main(operation, args):
     """
@@ -126,12 +118,12 @@ def Main(operation, args):
                 originator_order_salt = args[12]
                 taker_order_salt = args[13]
 
-                operation_result = exchange(marketplace,marketplace_owner_address,marketplace_owner_signature,
-                                            marketplace_owner_public_key,originator_address,originator_signature,
-                                            originator_public_key,taker_address,taker_signature,taker_public_key,
-                                            originator_order_salt,taker_order_salt,item_id,price)
+                operation_result = exchange(marketplace, marketplace_owner_address, marketplace_owner_signature,
+                                            marketplace_owner_public_key, originator_address, originator_signature,
+                                            originator_public_key, taker_address, taker_signature, taker_public_key,
+                                            originator_order_salt, taker_order_salt, item_id, price)
 
-                payload = ["exchange",originator_order_salt,marketplace,operation_result]
+                payload = ["exchange", originator_order_salt, marketplace, operation_result]
                 Notify(payload)
 
                 return operation_result
@@ -163,8 +155,11 @@ def Main(operation, args):
                 marketplace_owner_public_key = args[8]
                 originator_order_salt = args[9]
 
-                operation_result = trade_verified(marketplace,originator_address,taker_address,item_id,marketplace_owner_address,marketplace_owner_signature,marketplace_owner_public_key,originator_signature,originator_public_key,originator_order_salt)
-                transaction_details = ["trade",originator_order_salt,marketplace,operation_result]
+                operation_result = trade_verified(marketplace, originator_address, taker_address, item_id,
+                                                  marketplace_owner_address, marketplace_owner_signature,
+                                                  marketplace_owner_public_key, originator_signature,
+                                                  originator_public_key, originator_order_salt)
+                transaction_details = ["trade", originator_order_salt, marketplace, operation_result]
                 Notify(transaction_details)
 
                 return operation_result
@@ -180,7 +175,7 @@ def Main(operation, args):
 
                     if not CheckWitness(originator_address):
                         return False
-                    if not is_marketplace_owner(marketplace,originator_address):
+                    if not is_marketplace_owner(marketplace, originator_address):
                         return False
 
                     operation_result = trade(marketplace, originator_address, taker_address, item_id)
@@ -195,8 +190,10 @@ def Main(operation, args):
                 marketplace_owner_public_key = args[5]
                 originator_order_salt = args[6]
 
-                operation_result = give_item_verified(marketplace, address_to, item_id,marketplace_owner,marketplace_owner_signature,marketplace_owner_public_key,originator_order_salt)
-                payload = ["give_item",originator_order_salt,marketplace, operation_result]
+                operation_result = give_item_verified(marketplace, address_to, item_id, marketplace_owner,
+                                                      marketplace_owner_signature, marketplace_owner_public_key,
+                                                      originator_order_salt)
+                payload = ["give_item", originator_order_salt, marketplace, operation_result]
                 Notify(payload)
                 return operation_result
 
@@ -212,7 +209,8 @@ def Main(operation, args):
             for i in range(0, 6):
                 args.remove(0)
 
-            operation_result = give_items_verified(marketplace,address_to,marketplace_owner,marketplace_owner_signature,marketplace_owner_public_key,args)
+            operation_result = give_items_verified(marketplace, address_to, marketplace_owner,
+                                                   marketplace_owner_signature, marketplace_owner_public_key, args)
             payload = ["give_items", originator_order_salt, marketplace, operation_result]
             Notify(payload)
             return operation_result
@@ -241,11 +239,11 @@ def Main(operation, args):
                 marketplace_owner_public_key = args[7]
                 originator_order_salt = args[8]
 
-                operation_result = remove_item_verified(marketplace,originator_address,item_id,
-                                                        originator_order_salt,marketplace_owner_address
-                                                        ,marketplace_owner_signature,marketplace_owner_public_key,
-                                                        originator_signature,originator_public_key)
-                payload = ["remove_item",originator_order_salt,marketplace,operation_result]
+                operation_result = remove_item_verified(marketplace, originator_address, item_id,
+                                                        originator_order_salt, marketplace_owner_address
+                                                        , marketplace_owner_signature, marketplace_owner_public_key,
+                                                        originator_signature, originator_public_key)
+                payload = ["remove_item", originator_order_salt, marketplace, operation_result]
                 Notify(payload)
                 return operation_result
 
@@ -271,7 +269,7 @@ def Main(operation, args):
                 address = args[1]
                 result = is_marketplace_owner(marketplace, address)
 
-                payload = ["marketplace_owner",marketplace,address,result]
+                payload = ["marketplace_owner", marketplace, address, result]
                 Notify(payload)
                 return result
 
@@ -299,7 +297,7 @@ def Main(operation, args):
                     if not CheckWitness(originator_address):
                         return False
 
-                    operation_result = withdrawal(my_hash,originator_address,amount)
+                    operation_result = withdrawal(my_hash, originator_address, amount)
                     return operation_result
 
             if len(args) == 8:
@@ -314,9 +312,10 @@ def Main(operation, args):
 
                 my_hash = GetExecutingScriptHash()
 
-                if withdrawal_verified(my_hash,originator_address,tokens,originator_signature,originator_public_key,owner_address,owner_signature,owner_public_key,originator_order_salt):
+                if withdrawal_verified(my_hash, originator_address, tokens, originator_signature, originator_public_key,
+                                       owner_address, owner_signature, owner_public_key, originator_order_salt):
                     order_complete(originator_order_salt)
-                    payload = ["withdraw",originator_order_salt,originator_address, tokens]
+                    payload = ["withdraw", originator_order_salt, originator_address, tokens]
                     Notify(payload)
                     return True
 
@@ -334,9 +333,12 @@ def Main(operation, args):
                 marketplace_owner_public_key = args[7]
                 originator_order_salt = args[8]
 
-                operation_result = transfer_token_verified(originator_address, taker_address, tokens,originator_signature,originator_public_key,marketplace_owner_address,marketplace_owner_signature,marketplace_owner_public_key,originator_order_salt)
+                operation_result = transfer_token_verified(originator_address, taker_address, tokens,
+                                                           originator_signature, originator_public_key,
+                                                           marketplace_owner_address, marketplace_owner_signature,
+                                                           marketplace_owner_public_key, originator_order_salt)
 
-                transaction_details = ["transfer",originator_order_salt,operation_result]
+                transaction_details = ["transfer", originator_order_salt, operation_result]
                 Notify(transaction_details)
                 return operation_result
 
@@ -349,13 +351,13 @@ def Main(operation, args):
             if len(args) == 2:
                 marketplace = args[0]
                 fee = args[1]
-                return set_maker_fee(marketplace,fee)
+                return set_maker_fee(marketplace, fee)
 
         if operation == "set_taker_fees":
             if len(args) == 2:
                 marketplace = args[0]
                 fee = args[1]
-                return set_taker_fee(marketplace,fee)
+                return set_taker_fee(marketplace, fee)
 
         if operation == "get_maker_fee":
             if len(args) == 1:
@@ -398,7 +400,6 @@ def Main(operation, args):
         if operation == "get_state":
             return get_contract_state()
 
-
         # ========= Decentralized Games ==========
 
         # Battle Royale
@@ -413,9 +414,9 @@ def Main(operation, args):
             for i in range(0, 3):
                 args.remove(0)
 
-            result = BR_create(event_code,marketplace,marketplace_owner_address,args)
+            result = BR_create(event_code, marketplace, marketplace_owner_address, args)
 
-            payload = ["BR", event_code, "BR_create",marketplace_owner_address,result]
+            payload = ["BR", event_code, "BR_create", marketplace_owner_address, result]
             Notify(payload)
 
             return result
@@ -425,9 +426,10 @@ def Main(operation, args):
                 event_code = args[0]
                 address = args[1]
 
-                result = BR_sign_up(event_code,address)
-                details = ["BR", event_code,"BR_sign_up",address, result]
+                result = BR_sign_up(event_code, address)
+                details = ["BR", event_code, "BR_sign_up", address, result]
                 Notify(details)
+
                 return result
 
         if operation == "BR_start":
@@ -435,9 +437,9 @@ def Main(operation, args):
                 event_code = args[0]
                 address = args[1]
 
-                result = BR_start(event_code,address)
+                result = BR_start(event_code, address)
 
-                details = ["BR",event_code,"BR_start",address,result]
+                details = ["BR", event_code, "BR_start", address, result]
                 Notify(details)
 
                 return result
@@ -449,7 +451,7 @@ def Main(operation, args):
                 zone = args[2]
 
                 # The first action which will be resolved the next round.
-                return BR_choose_initial_grid_position(event_code, address,zone)
+                return BR_choose_initial_grid_position(event_code, address, zone)
 
         if operation == "BR_do_action":
             if len(args) == 4:
@@ -463,32 +465,34 @@ def Main(operation, args):
         if operation == "BR_finish_round":
             if len(args) == 1:
                 event_code = args[0]
+
                 return BR_finish_round(event_code)
 
-
         if operation == "BR_get_leaderboard":
-            
+
             if len(args) == 1:
                 context = GetContext()
-                
+
                 event_code = args[0]
-                leaderboard = get_BR_leaderboard(context,event_code)
+                leaderboard = get_BR_leaderboard(context, event_code)
                 if leaderboard != b'':
                     leaderboard = Deserialize(leaderboard)
                 else:
                     leaderboard = []
-                payload = ["BR",event_code,'leaderboard',leaderboard]
+                payload = ["BR", event_code, 'leaderboard', leaderboard]
                 Notify(payload)
+
                 return True
 
         if operation == "BR_get_event_details":
             if len(args) == 1:
                 context = GetContext()
-                
+
                 event_code = args[0]
-                event_details = get_BR_event_details(context,event_code)
-                payload = ["BR",event_code,"event_details",event_details]
+                event_details = get_BR_event_details(context, event_code)
+                payload = ["BR", event_code, "event_details", event_details]
                 Notify(payload)
+
                 return True
 
         return False
@@ -497,20 +501,19 @@ def Main(operation, args):
     if trigger == Verification():
         pass
         # check if the invoker is the owner of this contract
-        #is_owner = CheckWitness(contract_owner)
+        # is_owner = CheckWitness(contract_owner)
 
         # If owner, proceed
-        #if is_owner:
+        # if is_owner:
         #    return True
 
     return False
 
 
-def exchange(marketplace, marketplace_owner_address,marketplace_owner_signature,
-         marketplace_owner_public_key,originator_address,originator_signature,
-         originator_public_key,taker_address,taker_signature,taker_public_key,
-         originator_order_salt, taker_order_salt,item_id, price):
-
+def exchange(marketplace, marketplace_owner_address, marketplace_owner_signature,
+             marketplace_owner_public_key, originator_address, originator_signature,
+             originator_public_key, taker_address, taker_signature, taker_public_key,
+             originator_order_salt, taker_order_salt, item_id, price):
     """
     Verify the signatures of two parties and securely swap the item, and tokens between them.
     """
@@ -525,19 +528,20 @@ def exchange(marketplace, marketplace_owner_address,marketplace_owner_signature,
 
     originator_args = ["put_offer", marketplace, item_id, price, originator_order_salt]
 
-    if not verify_order(originator_address,originator_signature,originator_public_key,originator_args):
+    if not verify_order(originator_address, originator_signature, originator_public_key, originator_args):
         print("ERROR! originator has not signed the order")
         return False
 
     taker_args = ["buy_offer", marketplace, item_id, price, taker_order_salt]
-    if not verify_order(taker_address,taker_signature,taker_public_key,taker_args):
+    if not verify_order(taker_address, taker_signature, taker_public_key, taker_args):
         print("ERROR! Taker has not signed the order!")
         return False
 
     # A marketplace owner must verify so there are no jumps in the queue.
-    marketplace_owner_args = ["exchange",marketplace, item_id, price, originator_address, taker_address]
+    marketplace_owner_args = ["exchange", marketplace, item_id, price, originator_address, taker_address]
 
-    if not verify_order(marketplace_owner_address,marketplace_owner_signature,marketplace_owner_public_key, marketplace_owner_args):
+    if not verify_order(marketplace_owner_address, marketplace_owner_signature, marketplace_owner_public_key,
+                        marketplace_owner_args):
         print("ERROR! Marketplace owner has not signed the order!")
         return False
 
@@ -555,22 +559,12 @@ def exchange(marketplace, marketplace_owner_address,marketplace_owner_signature,
 
     return True
 
-def trade(marketplace,originator_address,taker_address,item_id):
-
-    # If the item is being transferred to the same address, don't waste gas and return True.
-    if originator_address == taker_address:
-        return True
-
-    # If the removal of the item from the address sending is successful, give the item to the address receiving.
-    if remove_item(marketplace, originator_address, item_id):
-        if give_item(marketplace, taker_address, item_id):
-            return True
 
 
-def trade_verified(marketplace,originator_address, taker_address, item_id,
-                  marketplace_owner_address,marketplace_owner_signature,
-                  marketplace_owner_public_key,originator_signature,
-                  originator_public_key, salt):
+def trade_verified(marketplace, originator_address, taker_address, item_id,
+                   marketplace_owner_address, marketplace_owner_signature,
+                   marketplace_owner_public_key, originator_signature,
+                   originator_public_key, salt):
     """
     Transfer an item from an address, to an address on a marketplace.
     """
@@ -585,7 +579,7 @@ def trade_verified(marketplace,originator_address, taker_address, item_id,
 
     args = ["trade", marketplace, originator_address, taker_address, item_id, salt]
 
-    if not verify_order(marketplace_owner_address, marketplace_owner_signature,marketplace_owner_public_key,args):
+    if not verify_order(marketplace_owner_address, marketplace_owner_signature, marketplace_owner_public_key, args):
         print("ERROR! The marketplace owner has not permitted the transaction.")
         return False
 
@@ -593,7 +587,7 @@ def trade_verified(marketplace,originator_address, taker_address, item_id,
         print("ERROR! The address removing has not signed this!")
         return False
 
-    if trade(marketplace,originator_address,taker_address,item_id):
+    if trade(marketplace, originator_address, taker_address, item_id):
         set_order_complete(salt)
         return True
 
@@ -601,29 +595,27 @@ def trade_verified(marketplace,originator_address, taker_address, item_id,
     return False
 
 
-def give_item(marketplace,taker_address,item_id):
-    # Get the players inventory from storage.
-    inventory_s = get_inventory(marketplace, taker_address)
+def trade(marketplace, originator_address, taker_address, item_id):
+    """
+    Trade an item from one address to another, on a specific marketplace.
+    """
+    # If the item is being transferred to the same address, don't waste gas and return True.
+    if originator_address == taker_address:
+        return True
 
-    # If the address owns no items create a new list, else grab the pre-existing list and append the new item.
-    if inventory_s == b'':
-        inventory = [item_id]
-    else:
-        inventory = Deserialize(inventory_s)
-        inventory.append(item_id)
+    # If the removal of the item from the address sending is successful, give the item to the address receiving.
+    if remove_item(marketplace, originator_address, item_id):
+        if give_item(marketplace, taker_address, item_id):
+            return True
 
-    # Serialize and save the inventory back to the storage.
-    inventory_s = Serialize(inventory)
-    save_inventory(marketplace, taker_address, inventory_s)
 
-    return True
 
 
 def give_item_verified(marketplace, taker_address, item_id,
-              owner_address, owner_signature,
-              owner_public_key, salt):
+                       owner_address, owner_signature,
+                       owner_public_key, salt):
     """
-    Give an item to an address in a marketplace.
+    Give an item to an address on a specific marketplace, verified by a marketplace owner.
     """
 
     if not is_marketplace_owner(marketplace, owner_address):
@@ -641,14 +633,33 @@ def give_item_verified(marketplace, taker_address, item_id,
 
     set_order_complete(salt)
 
-    give_item(marketplace,taker_address,item_id)
+    give_item(marketplace, taker_address, item_id)
 
     return True
 
+def give_item(marketplace, taker_address, item_id):
+    """
+    Give an item to an address on a specific marketplace.
+    """
+    # Get the players inventory from storage.
+    inventory_s = get_inventory(marketplace, taker_address)
+
+    # If the address owns no items create a new list, else grab the pre-existing list and append the new item.
+    if inventory_s == b'':
+        inventory = [item_id]
+    else:
+        inventory = Deserialize(inventory_s)
+        inventory.append(item_id)
+
+    # Serialize and save the inventory back to the storage.
+    inventory_s = Serialize(inventory)
+    save_inventory(marketplace, taker_address, inventory_s)
+
+    return True
 
 def give_items_verified(marketplace, taker_address, item_id,
-              owner_address, owner_signature,
-              owner_public_key, salt, items):
+                        owner_address, owner_signature,
+                        owner_public_key, salt, items):
     """
     Give many items at once.
     This can be useful for developers giving  their users many items at once.
@@ -665,7 +676,7 @@ def give_items_verified(marketplace, taker_address, item_id,
         print("ERROR! This order has already occurred!")
         return False
 
-    args = ["give_items", marketplace, taker_address, item_id, 0, salt,items]
+    args = ["give_items", marketplace, taker_address, item_id, 0, salt, items]
     if not verify_order(owner_address, owner_signature, owner_public_key, args):
         print("A marketplace owner has not signed this order.")
         return False
@@ -692,28 +703,9 @@ def give_items_verified(marketplace, taker_address, item_id,
     return True
 
 
-def remove_item(marketplace,address,item_id):
-    """
-    Remove an item from an address in storage.
-    """
-    inventory_s = get_inventory(marketplace, address)
-    if inventory_s != b'':
-        inventory = Deserialize(inventory_s)
-        current_index = 0
-
-        for item in inventory:
-            if item == item_id:
-                inventory.remove(current_index)
-                inventory_s = Serialize(inventory)
-                save_inventory(marketplace, address, inventory_s)
-                return True
-            current_index += 1
-
-    return False
-
 
 def remove_item_verified(marketplace, address, item_id, salt, owner_address,
-                owner_signature, owner_public_key, signature,public_key):
+                         owner_signature, owner_public_key, signature, public_key):
     """
     Remove an item from an address on a marketplace.
     """
@@ -736,21 +728,43 @@ def remove_item_verified(marketplace, address, item_id, salt, owner_address,
         print("ERROR! The address removing has not signed this!")
         return False
 
-    if remove_item(marketplace,address,item_id):
+    if remove_item(marketplace, address, item_id):
         set_order_complete(salt)
         return True
 
     return False
 
 
-def verify_order(address,signature,public_key,args):
+def remove_item(marketplace, address, item_id):
     """
-    Must verify that an order is properly signed or it can not occur.
+    Remove an item from an address on a specific marketplace.
+    """
+    inventory_s = get_inventory(marketplace, address)
+    if inventory_s != b'':
+        inventory = Deserialize(inventory_s)
+        current_index = 0
+
+        for item in inventory:
+            if item == item_id:
+                inventory.remove(current_index)
+                inventory_s = Serialize(inventory)
+                save_inventory(marketplace, address, inventory_s)
+                return True
+            current_index += 1
+
+    return False
+
+
+def verify_order(address, signature, public_key, args):
+    """
+    Verify that an order is properly signed by a signature and public key.
+    We also ensure the public key can be recreated into the script hash
+    so we know that it is the address that signed it.
     """
 
     message = ""
     for arg in args:
-        message = concat(message,arg)
+        message = concat(message, arg)
 
     # Create the script hash from the given public key, to verify the address.
     redeem_script = b'21' + public_key + b'ac'
@@ -761,7 +775,7 @@ def verify_order(address,signature,public_key,args):
         print("ERROR! The public key does not match with the address who signed the order.")
         return False
 
-    if not verify_signature(public_key,signature,message):
+    if not verify_signature(public_key, signature, message):
         print("ERROR! Signature has not signed the order.")
         return False
 
@@ -774,11 +788,12 @@ def get_contract_state():
     state = Get(context, contract_state_key)
     return state
 
+
 def set_contract_state(state):
     """ Set the state of the contract. """
     context = GetContext()
-    Delete(context,contract_state_key)
-    Put(context,contract_state_key,state)
+    Delete(context, contract_state_key)
+    Put(context, contract_state_key, state)
 
     return True
 
@@ -801,12 +816,12 @@ def order_complete(salt):
         return True
 
     return False
-    #return exists != b''
+    # return exists != b''
 
 
 def increase_balance(address, amount):
     """
-    Called on deposit to increase the amount of LOOT in storage of an address..
+    Called on deposit to increase the amount of LOOT in storage of an address.
     """
     context = GetContext()
 
@@ -826,6 +841,9 @@ def increase_balance(address, amount):
 
 
 def reduce_balance(address, amount):
+    """
+    Called on withdrawal, to reduce the amount of LOOT in storage of an address.
+    """
     context = GetContext()
     if amount < 1:
         print("ERROR! Can only reduce a balance >= 1. ")
@@ -849,9 +867,47 @@ def reduce_balance(address, amount):
     return True
 
 
+
+def transfer_token_verified(originator_address, taker_address, tokens, originator_signature, originator_public_key,
+                            owner_address, owner_signature, owner_public_key, salt):
+    """
+    Transfer tokens on the framework.
+
+    Token transfers within this contract are only meant to be done for purchasing items with MTX.
+    This must be allowed through by the contract owner.
+
+    NOTE: Funds will always still be able to be withdrawn by a user back into the NEP-5 contract
+    if the contract is in a terminated state.
+    """
+
+    if owner_address != contract_owner:
+        print("ERROR! Address specified is not the contract owner.")
+        return False
+
+    if order_complete(salt):
+        print("ERROR! This order has already occurred!")
+        return False
+
+    order_args = ["transfer", originator_address, taker_address, tokens, salt]
+
+    if not verify_order(owner_address, owner_signature, owner_public_key, order_args):
+        print("ERROR! The contract owner has not signed this order.")
+        return False
+
+    if not verify_order(originator_address, originator_signature, originator_public_key, order_args):
+        print("ERROR! The address transferring tokens has not signed this!")
+        return False
+
+    if transfer_token(originator_address, taker_address, tokens):
+        order_complete(salt)
+        return True
+
+    return False
+
+
 def transfer_token_to(address_to, amount):
     """
-    Transfer the specified amount of LOOT from an address, to an address.
+    Transfer the specified amount of LOOT to an address within the smart contract..
     """
     context = GetContext()
 
@@ -867,41 +923,6 @@ def transfer_token_to(address_to, amount):
     Put(context, address_to, balance_to)
 
     return True
-
-
-def transfer_token_verified(originator_address, taker_address, tokens,originator_signature,originator_public_key,
-                            owner_address, owner_signature, owner_public_key,salt):
-    """
-    Transfer tokens on the framework.
-    Token transfers within this contract are only meant to be done for purchasing items with MTX.
-    This must be allowed through by the contract owner.
-
-    NOTE: Funds will always still be able to be withdrawn by a user back into the NEP-5 contract.
-    """
-
-    if owner_address != contract_owner:
-        print("ERROR! Address specified is not the contract owner.")
-        return False
-
-    if order_complete(salt):
-        print("ERROR! This order has already occurred!")
-        return False
-
-    order_args = ["transfer", originator_address,taker_address, tokens, salt]
-
-    if not verify_order(owner_address, owner_signature, owner_public_key, order_args):
-        print("ERROR! The contract owner has not signed this order.")
-        return False
-
-    if not verify_order(originator_address,originator_signature, originator_public_key, order_args):
-        print("ERROR! The address transferring tokens has not signed this!")
-        return False
-
-    if transfer_token(originator_address,taker_address,tokens):
-        order_complete(salt)
-        return True
-
-    return False
 
 
 def transfer_token(address_from, address_to, amount):
@@ -939,7 +960,7 @@ def transfer_token(address_from, address_to, amount):
 
 def handle_deposit(args):
     """
-    Handle deposited LOOT token.
+    Called when the NEP-5 LOOT contract calls this contract, we handle the deposited LOOT token.
     """
     address_from = args[0]
     address_to = args[1]
@@ -954,9 +975,8 @@ def handle_deposit(args):
     return increase_balance(address_from, amount)
 
 
-def withdrawal_verified(my_hash,originator_address,tokens,originator_signature,originator_public_key,
-               owner_address, owner_signature, owner_public_key,salt):
-
+def withdrawal_verified(my_hash, originator_address, tokens, originator_signature, originator_public_key,
+                        owner_address, owner_signature, owner_public_key, salt):
     """
     Withdrawal on the framework must be verified.
 
@@ -981,9 +1001,11 @@ def withdrawal_verified(my_hash,originator_address,tokens,originator_signature,o
         print("ERROR! The address transferring tokens has not signed this!")
         return False
 
-    return withdrawal(my_hash,originator_address,tokens)
+    return withdrawal(my_hash, originator_address, tokens)
 
-def withdrawal(my_hash,originator_address,tokens):
+
+def withdrawal(my_hash, originator_address, tokens):
+    """ Withdraw from the smart contract, invoking the Loot NEP-5 contract. """
 
     balance = balance_of(originator_address)
     if tokens < 1 or tokens > balance:
@@ -998,6 +1020,7 @@ def withdrawal(my_hash,originator_address,tokens):
 
     return False
 
+
 def balance_of(address):
     """
     Query the LOOT balance of an address.
@@ -1011,7 +1034,7 @@ def balance_of(address):
 
 
 def calculate_fees_of_order(marketplace, maker_address, taker_address, amount):
-    """Order has been filled between to parties, the owner of the
+    """When an order has been filled between two parties, the owner of the
     marketplace can optionally take some fees.
     Maker gets charged once the order is filled.
     Taker get charged upon buying the order."""
@@ -1162,6 +1185,7 @@ def get_taker_fee(marketplace):
     taker_fee = Get(context, key)
     return taker_fee
 
+
 def add_owner_wallet(marketplace, address):
     """
     Add an owner wallet, giving them exclusive rights to their marketplace.
@@ -1190,17 +1214,16 @@ def is_marketplace_owner(marketplace, address):
 
     return owner != b''
 
-# endregion
 
+# endregion
 
 
 # region Decentralized GameModes & events.
 
 
-def BR_create(event_code,marketplace,marketplace_owner_address,rewards):
+def BR_create(event_code, marketplace, marketplace_owner_address, rewards):
     '''
     Create a new battle royale decentralized event, with the given rewards as prizes for the winners.
-
     :param event_code: The unique code of the event.
     :param marketplace: The game being hosted on.
     :param marketplace_owner_address: The address creating this event.
@@ -1209,7 +1232,7 @@ def BR_create(event_code,marketplace,marketplace_owner_address,rewards):
     '''
 
     # Currently only an owner can give out rewards for testing.
-    if not is_marketplace_owner(marketplace,marketplace_owner_address):
+    if not is_marketplace_owner(marketplace, marketplace_owner_address):
         print("ERROR! Cannot start event: must be an owner of the marketplace.")
         return False
 
@@ -1220,7 +1243,7 @@ def BR_create(event_code,marketplace,marketplace_owner_address,rewards):
     context = GetContext()
 
     # Ensure an event with this code does not already exist.
-    br_details_s = get_BR_event_details(context,event_code)
+    br_details_s = get_BR_event_details(context, event_code)
 
     if br_details_s != b'':
         print("ERROR! Cannot start event: event code is not unique.")
@@ -1228,19 +1251,18 @@ def BR_create(event_code,marketplace,marketplace_owner_address,rewards):
 
     # Create a new set of details for the event, and save this to storage to be queryable.
     # TODO lists suffice for building, but if necessary these lists can be more neatly done with dictionaries.
-    br_details = [0,0,marketplace_owner_address,False,0,0,10,marketplace,0]
-    set_BR_event_details(context,event_code,br_details)
+    br_details = [0, 0, marketplace_owner_address, False, 0, 0, 10, marketplace, 0]
+    set_BR_event_details(context, event_code, br_details)
 
     # Add rewards at stake for the contest, may be any number n, s.t. n <= 12 (16 max parameters, 4 used).
-    set_BR_rewards(context,event_code,rewards)
+    set_BR_rewards(context, event_code, rewards)
 
     return True
 
 
-def BR_start(event_code,address):
+def BR_start(event_code, address):
     """
     Start the BR event.
-
     :param event_code: The unique code of the event.
     :param address: The address which is starting the event.
     :return: True if the event starts.
@@ -1252,7 +1274,7 @@ def BR_start(event_code,address):
 
     context = GetContext()
 
-    br_details = get_BR_event_details(context,event_code)
+    br_details = get_BR_event_details(context, event_code)
 
     if br_details == b'':
         print("ERROR! Cannot start event, it does not exist.")
@@ -1264,7 +1286,7 @@ def BR_start(event_code,address):
         print("ERROR! Cannot start event, is not the owner of the event.")
         return False
 
-    player_list = get_BR_player_list(context,event_code)
+    player_list = get_BR_player_list(context, event_code)
     if player_list == b'':
         print("ERROR! No players, cannot start the match.")
         return False
@@ -1275,7 +1297,7 @@ def BR_start(event_code,address):
     # Starts at 3 x 3 currently for each player to keep a square shaped grid.
     player_count -= 1
     grid_length = 3 + player_count
-    br_details[8] = grid_length # Must store the grid length for calculations with boundaries and movement.
+    br_details[8] = grid_length  # Must store the grid length for calculations with boundaries and movement.
     grid_capacity = grid_length * grid_length
     # Take one as player can land at zones 0-15.
     grid_capacity -= 1
@@ -1284,15 +1306,14 @@ def BR_start(event_code,address):
     br_details[3] = True
     # Set the block in which the round has started, used an approximate time reference.
     br_details[4] = GetHeight()
-    set_BR_event_details(context,event_code,br_details)
+    set_BR_event_details(context, event_code, br_details)
 
     return True
 
 
-def BR_sign_up(event_code,address):
+def BR_sign_up(event_code, address):
     """
     Currently anyone may sign up to the BR, it is a public decentralized contest.
-
     :param event_code: The unique code of the event.
     :param address: The address wanting to sign up.
     :return: If signed up successfully.
@@ -1300,7 +1321,7 @@ def BR_sign_up(event_code,address):
     context = GetContext()
 
     # Get the stored details of the event.
-    br_details = get_BR_event_details(context,event_code)
+    br_details = get_BR_event_details(context, event_code)
 
     if br_details == b'':
         print("ERROR! Cannot sign up to the event, there is no event running with this code.")
@@ -1316,32 +1337,31 @@ def BR_sign_up(event_code,address):
         print("ERROR! Cannot sign up to an event, witness is not attached to tx.")
         return False
 
-    stored_entrant = get_BR_entrant_details(context,event_code,address)
+    stored_entrant = get_BR_entrant_details(context, event_code, address)
 
     if stored_entrant != b'':
         print("ERROR! Cannot sign up to event, this address is already signed up.")
         return False
 
     # Add this player to a list of the active players and save into storage.
-    list_of_players = get_BR_player_list(context,event_code)
+    list_of_players = get_BR_player_list(context, event_code)
     if list_of_players == b'':
         list_of_players = []
     else:
         list_of_players = Deserialize(list_of_players)
     list_of_players.append(address)
-    set_BR_player_list(context,event_code,list_of_players)
+    set_BR_player_list(context, event_code, list_of_players)
 
     # Create a new entrant information list, and add it into storage so it may be queried.
-    entrant_information = [0,0,"",0]
-    set_BR_entrant_details(context,event_code,address,entrant_information)
+    entrant_information = [0, 0, "", 0]
+    set_BR_entrant_details(context, event_code, address, entrant_information)
 
     return True
 
 
-def BR_choose_initial_grid_position(event_code,address,zone):
+def BR_choose_initial_grid_position(event_code, address, zone):
     """
     Every player is required to choose their initial position they will "land" in.
-
     :param event_code: The unique code of the event.
     :param address: The address performing the action.
     :param zone: The zone/grid position they want to be put in.
@@ -1396,10 +1416,9 @@ def BR_choose_initial_grid_position(event_code,address,zone):
     return True
 
 
-def BR_do_action(event_code,address,action,direction):
+def BR_do_action(event_code, address, action, direction):
     '''
     Perform an action, in the event, logic of the game is is all determined here.
-
     :param event_code: The unique code of the event.
     :param address: The address performing the action.
     :param action: The action being performed.
@@ -1413,7 +1432,7 @@ def BR_do_action(event_code,address,action,direction):
         print("ERROR: Cannot sign up to an event, witness is not attached to tx.")
         return False
 
-    event_details = get_BR_event_details(context,event_code)
+    event_details = get_BR_event_details(context, event_code)
 
     if event_details == b'':
         print("ERROR: Cannot perform action, event does not exist.")
@@ -1421,7 +1440,7 @@ def BR_do_action(event_code,address,action,direction):
 
     event_details = Deserialize(event_details)
 
-    entrant_details = get_BR_entrant_details(context,event_code,address)
+    entrant_details = get_BR_entrant_details(context, event_code, address)
 
     if entrant_details == b'':
         print("ERROR: Cannot perform action, entrant does not exist in this event.")
@@ -1451,15 +1470,14 @@ def BR_do_action(event_code,address,action,direction):
     # Save details and resolve the round.
     set_BR_entrant_details(context, event_code, address, entrant_details)
 
-    BR_resolve_round(event_code, address,event_details,entrant_details)
+    BR_resolve_round(event_code, address, event_details, entrant_details)
 
     return True
 
 
-def BR_resolve_round(event_code,address,event_details,entrant_details):
+def BR_resolve_round(event_code, address, event_details, entrant_details):
     """
     Called internally by the smart contract to resolve a round after an address completes an action.
-
     :param event_code: The unique code of the event.
     :param address: The address performing the action.
     :param event_details: The stored details of the event.
@@ -1498,7 +1516,7 @@ def BR_resolve_round(event_code,address,event_details,entrant_details):
             zone_to -= 1
 
         # If doing this move has not made us out of bounds, we can move the player.
-        if not is_player_out_of_bounds(zone_to,grid_side_length,direction_moving,0):
+        if not is_player_out_of_bounds(zone_to, grid_side_length, direction_moving, 0):
             # Move zone and save details.
             entrant_details[0] = zone_to
             set_BR_entrant_details(context, event_code, address, entrant_details)
@@ -1510,7 +1528,7 @@ def BR_resolve_round(event_code,address,event_details,entrant_details):
     list_of_players = get_BR_player_list(context, event_code)
     list_of_players = Deserialize(list_of_players)
 
-    for player in list_of_players: # ~ 10
+    for player in list_of_players:  # ~ 10
         if player != address:
             entrant = get_BR_entrant_details(context, event_code, player)
             if entrant != b'':
@@ -1533,28 +1551,29 @@ def BR_resolve_round(event_code,address,event_details,entrant_details):
         opponent_action = player_vs_details[2]
 
         # Fight and publish the results.
-        battle_result = BR_roll_combat(caller_action,opponent_action)
+        battle_result = BR_roll_combat(caller_action, opponent_action)
 
-        payload = ["BR", event_code, "fight", round_in,address, address_vs,battle_result]
+        payload = ["BR", event_code, "fight", round_in, address, address_vs, battle_result]
         Notify(payload)
 
         if battle_result:
             print("BATTLE! Win -> removing opponent from battle!")
-            BR_remove_player(event_code,address_vs)
+            BR_remove_player(event_code, address_vs)
 
         else:
             print("BATTLE! Lost -> removing caller from battle!")
             # Remove and return true as complete.
-            BR_remove_player(event_code,address)
+            BR_remove_player(event_code, address)
             return False
 
     # If a player is looting and survived the round, we can loot items.
     if caller_action == "loot":
-        BR_loot_action(event_code,round_in,address)
+        BR_loot_action(event_code, round_in, address)
 
     return True
 
-def BR_remove_player(event_code,address):
+
+def BR_remove_player(event_code, address):
     '''
     Remove a player from the BR, after they lose determined by the sc.
     :param event_code:
@@ -1566,7 +1585,7 @@ def BR_remove_player(event_code,address):
 
     # Simply add the address to the leaderboard list,
     # and we display them in order of being knocked out, last player wins.
-    leaderboard = get_BR_leaderboard(context,event_code)
+    leaderboard = get_BR_leaderboard(context, event_code)
 
     if leaderboard == b'':
         leaderboard = [address]
@@ -1574,12 +1593,12 @@ def BR_remove_player(event_code,address):
         leaderboard = Deserialize(leaderboard)
         leaderboard.append(address)
 
-    set_BR_leaderboard(context,event_code,leaderboard)
+    set_BR_leaderboard(context, event_code, leaderboard)
 
     # Delete the entrant details so they can not perform any other action.
     half_key = concat(battle_royale_entrant_key, event_code)
     complete_key = concat(half_key, address)
-    Delete(context,complete_key)
+    Delete(context, complete_key)
 
     # Finally remove the address from the list of active players.
     list_of_all_players = get_BR_player_list(context, event_code)
@@ -1590,18 +1609,17 @@ def BR_remove_player(event_code,address):
     for player in list_of_all_players:
         if player == address:
             list_of_all_players.remove(current_index)
-            set_BR_player_list(context,event_code,list_of_all_players)
+            set_BR_player_list(context, event_code, list_of_all_players)
             return list_of_all_players
         current_index += 1
 
     return list_of_all_players
 
 
-def BR_loot_action(event_code,current_round,address):
+def BR_loot_action(event_code, current_round, address):
     """
     Called internally by the smart contract when a user performs a loot action.
     These events are caught and if the user found an item they are given in the game.
-
     :param event_code: The unique code of the event.
     :param current_round: The current round to calculate the drop chance.
     :param address: The address performing the loot action.
@@ -1624,10 +1642,10 @@ def BR_loot_action(event_code,current_round,address):
 
     return True
 
+
 def BR_roll_combat(caller_action, opponent_action):
     """
     Internally called by the smart contract to fairly decide the outcome of combat between players.
-
     :param caller_action: The action being performed by the caller.
     :param opponent_action: The action being performed by the opponent.
     :return: True if the caller wins.
@@ -1654,16 +1672,11 @@ def BR_roll_combat(caller_action, opponent_action):
     return random_number_0_100() <= caller_win_chance
 
 
-
-
-
 def BR_finish_round(event_code):
     """
     Called by anyone to finish an event, will only finish if the conditions are met.
-
     # Best case, ~30s each round.
     # Worst case, ~3min each round.
-
     :param event_code: The unique code of the event.
     :return: True if the event was finished.
     """
@@ -1671,7 +1684,7 @@ def BR_finish_round(event_code):
     context = GetContext()
     height = GetHeight()
 
-    br_details = get_BR_event_details(context,event_code)
+    br_details = get_BR_event_details(context, event_code)
 
     if br_details == b'':
         print("ERROR! Cannot end round, event does not exist.")
@@ -1688,7 +1701,7 @@ def BR_finish_round(event_code):
 
     # If 10 blocks have past, the round has timed out.
     if height - round_start_height >= BR_ROUND_TIMEOUT:
-        return BR_on_round_finish(event_code,br_details,context,height)
+        return BR_on_round_finish(event_code, br_details, context, height)
     # If we have not timed out we check if every player has completed an action for this round so we can finish early.
     else:
         list_of_players = get_BR_player_list(context, event_code)
@@ -1705,14 +1718,12 @@ def BR_finish_round(event_code):
                     return False
 
         # All players are done!
-        return BR_on_round_finish(event_code,br_details,context,height)
+        return BR_on_round_finish(event_code, br_details, context, height)
 
 
-
-def BR_on_round_finish(event_code,br_details,context,height):
+def BR_on_round_finish(event_code, br_details, context, height):
     """
     Called internally by the smart contract to conclude a round.
-
     :param event_code: The unique code of the event.
     :param br_details: The details of the BR event.
     :param context: The storage context.
@@ -1735,7 +1746,7 @@ def BR_on_round_finish(event_code,br_details,context,height):
     # we can bundle that up with checking if they have moved to save gas.
     if br_details[0] >= ROUND_DESTROYED_ZONES_GENERATE:
         # Returns a list of players that survived through the destroyed zones.
-        list_of_players = BR_destroy_next_zone(event_code,br_details[0],br_details[8])
+        list_of_players = BR_destroy_next_zone(event_code, br_details[0], br_details[8])
     # If we have not checked players that have not moved yet, do so.
     else:
         # Remove players that did not perform an action this turn.
@@ -1753,7 +1764,7 @@ def BR_on_round_finish(event_code,br_details,context,height):
             # Now we can remove players without mutating the original list during iteration.
             list_of_players = BR_remove_player(event_code, removed_players_address[i])
 
-            payload = ["BR",event_code,"removed_player",removed_players_address[i]]
+            payload = ["BR", event_code, "removed_player", removed_players_address[i]]
             Notify(payload)
 
     remaining_player_count = len(list_of_players)
@@ -1766,21 +1777,21 @@ def BR_on_round_finish(event_code,br_details,context,height):
         # If there is a final playing remaining, remove him and end the match.
         if remaining_player_count > 0:
             last_player_address = list_of_players[0]
-            BR_remove_player(event_code,last_player_address)
+            BR_remove_player(event_code, last_player_address)
 
-        return BR_end_event(event_code,br_details,context)
+        return BR_end_event(event_code, br_details, context)
 
-    payload = ['BR',event_code,'round_end',br_details[0],True]
+    payload = ['BR', event_code, 'round_end', br_details[0], True]
     Notify(payload)
 
     return True
 
-def BR_end_event(event_code,event_details,context):
+
+def BR_end_event(event_code, event_details, context):
     """
     Called from within the contract when the event ends.
     Pays out items to the top x players dependent on the length
     of rewards the event was initialized with.
-
     :param event_code: The unique event code of the event.
     :param event_details: The details of the event.
     :param context: The storage context.
@@ -1789,13 +1800,13 @@ def BR_end_event(event_code,event_details,context):
 
     # Remove the event as it is complete to clean up storage.
     # The leaderboard remains.
-    remove_BR_event_details(context,event_code)
+    remove_BR_event_details(context, event_code)
 
-    leaderboard = get_BR_leaderboard(context,event_code)
+    leaderboard = get_BR_leaderboard(context, event_code)
     leaderboard = Deserialize(leaderboard)
 
     # Get the rewards of the event.
-    rewards = get_BR_rewards(context,event_code)
+    rewards = get_BR_rewards(context, event_code)
 
     if rewards == b'':
         print("ERROR: No rewards exist for this event.")
@@ -1803,7 +1814,7 @@ def BR_end_event(event_code,event_details,context):
 
     rewards = Deserialize(rewards)
 
-    for i in range(0,len(rewards)):
+    for i in range(0, len(rewards)):
         # As we are giving it to the last added addresses to the list, those whom survived the longest.
         if len(leaderboard) > 0 and i <= len(leaderboard) - 1:
             # Winners are the last x players s.t. x == len(rewards) for now.
@@ -1817,25 +1828,23 @@ def BR_end_event(event_code,event_details,context):
             give_item(marketplace, address, reward)
 
             # Acknowledge that a user received a reward.
-            payload = ["BR",event_code,"received_reward",address,reward]
+            payload = ["BR", event_code, "received_reward", address, reward]
             Notify(payload)
 
     # Can then query the leaderboard to see winners outside.
-    payload = ["BR",event_code,"event_complete",True]
+    payload = ["BR", event_code, "event_complete", True]
     Notify(payload)
 
     return True
 
 
-def BR_destroy_next_zone(event_code,round_on,grid_length):
+def BR_destroy_next_zone(event_code, round_on, grid_length):
     """
     This is only called after advancing a zone.
     Mark a zone for destruction, and destroy a previous
     zone if there is one.
     This encourages the player to move from their zone.
-
     This way, the next side that will be stripped from the map will always be random .
-
     :param event_code: The unique code of the event.
     :param round_on: The current round the event is on.
     :param grid_length: The length of a side of the grid map.
@@ -1848,10 +1857,10 @@ def BR_destroy_next_zone(event_code,round_on,grid_length):
 
     # Check if there is a previous marked zone.
     # Marked zone will be a marked side, so the side the gas is coming in on.
-    current_destroyed_depths = get_BR_destroyed_zone_depths(context,event_code)
+    current_destroyed_depths = get_BR_destroyed_zone_depths(context, event_code)
 
     # Grab the list of remaining players.
-    player_list = get_BR_player_list(context,event_code)
+    player_list = get_BR_player_list(context, event_code)
     player_list = Deserialize(player_list)
 
     # If the depths have been initialized.
@@ -1873,7 +1882,8 @@ def BR_destroy_next_zone(event_code,round_on,grid_length):
                         entrant = Deserialize(entrant)
                         zone_entrant_is_in = entrant[0]
                         # Out of bounds ? if so remove them.
-                        entrant_out_of_bounds = is_player_out_of_bounds(zone_entrant_is_in,grid_length,i,current_destroyed_depths[i])
+                        entrant_out_of_bounds = is_player_out_of_bounds(zone_entrant_is_in, grid_length, i,
+                                                                        current_destroyed_depths[i])
                         # Did they perform an action this round before it timed out ? if not, remove them.
                         entrant_did_not_do_action = entrant[1] != round_on
                         if entrant_out_of_bounds or entrant_did_not_do_action:
@@ -1889,7 +1899,7 @@ def BR_destroy_next_zone(event_code,round_on,grid_length):
     else:
         # Initialize the list of depths the "poison" has consumed the sides,
         # and has in turn stripped down the grid map area.
-        current_destroyed_depths = [0,0,0,0]
+        current_destroyed_depths = [0, 0, 0, 0]
 
     # Pick a new random side for the gas to come from next round, and notify the event.
     # So we can increment to say the depth of that row has increased, that will be checked next round to give players
@@ -1897,10 +1907,10 @@ def BR_destroy_next_zone(event_code,round_on,grid_length):
     side_gas_is_coming = random_number_upper_limit(4)
     value = current_destroyed_depths[side_gas_is_coming]
     current_destroyed_depths[side_gas_is_coming] = value + 1
-    set_BR_destroyed_zone_depths(context,event_code,current_destroyed_depths)
+    set_BR_destroyed_zone_depths(context, event_code, current_destroyed_depths)
 
     # Notify players that a zone has been marked so they have a chance to move.
-    payload = ["BR",event_code,"zone_marked",side_gas_is_coming]
+    payload = ["BR", event_code, "zone_marked", side_gas_is_coming]
     Notify(payload)
 
     return player_list
@@ -1909,7 +1919,6 @@ def BR_destroy_next_zone(event_code,round_on,grid_length):
 def is_player_out_of_bounds(zone_on, grid_length, side, depth):
     """
     Check if a player is outside the bounds of the map.
-
     :param zone_on: The zone the player is currently on.
     :param grid_length: The length of the grid, determined at the beginning of the match.
     :param side: The side we are checking if out of bounds. As a player can only move one square at a time.
@@ -1956,67 +1965,73 @@ def is_player_out_of_bounds(zone_on, grid_length, side, depth):
 
 # BR Mutators
 
-def set_BR_event_details(context,event_code,details):
+def set_BR_event_details(context, event_code, details):
     ''' Details of the BR event, capacity, owner, etc.'''
-    key = concat(battle_royale_details_key,event_code)
-    br_details_s = Get(context,key)
+    key = concat(battle_royale_details_key, event_code)
+    br_details_s = Get(context, key)
     if br_details_s != b'':
-        Delete(context,key)
+        Delete(context, key)
     br_details_s = Serialize(details)
-    Put(context,key,br_details_s)
+    Put(context, key, br_details_s)
     return True
 
-def set_BR_entrant_details(context,event_code,address,details):
+
+def set_BR_entrant_details(context, event_code, address, details):
     ''' Details of the entrant, round action, action, etc.'''
     half_key = concat(battle_royale_entrant_key, event_code)
     complete_key = concat(half_key, address)
     stored_entrant_s = Get(context, complete_key)
     if stored_entrant_s != b'':
-        Delete(context,complete_key)
+        Delete(context, complete_key)
     details_s = Serialize(details)
-    Put(context,complete_key,details_s)
+    Put(context, complete_key, details_s)
     return True
 
-def set_BR_destroyed_zone_depths(context,event_code,zones):
+
+def set_BR_destroyed_zone_depths(context, event_code, zones):
     ''' A list of zones that any player on them will be disqualified. '''
-    br_destroyed_zones_key = concat(battle_royale_destroyed_zones_key,event_code)
-    destroyed_zones_s = Get(context,br_destroyed_zones_key)
+    br_destroyed_zones_key = concat(battle_royale_destroyed_zones_key, event_code)
+    destroyed_zones_s = Get(context, br_destroyed_zones_key)
     if destroyed_zones_s != b'':
-        Delete(context,br_destroyed_zones_key)
+        Delete(context, br_destroyed_zones_key)
     zones_s = Serialize(zones)
-    Put(context,br_destroyed_zones_key,zones_s)
+    Put(context, br_destroyed_zones_key, zones_s)
     return True
 
-def set_BR_rewards(context,event_code,rewards):
+
+def set_BR_rewards(context, event_code, rewards):
     ''' A list of the rewards of a BR event.'''
     rewards_s = Serialize(rewards)
-    key = concat(battle_royale_rewards_key,event_code)
-    Put(context,key,rewards_s)
+    key = concat(battle_royale_rewards_key, event_code)
+    Put(context, key, rewards_s)
     return True
 
-def set_BR_marked_zone(context,event_code,zone):
+
+def set_BR_marked_zone(context, event_code, zone):
     key = concat(battle_royale_marked_destroyed_zone_key, event_code)
     Put(context, key, zone)
     return True
 
-def set_BR_leaderboard(context,event_code,leaders):
-    key = concat(battle_royale_event_results_key,event_code)
-    leaderboard_s = Get(context,key)
+
+def set_BR_leaderboard(context, event_code, leaders):
+    key = concat(battle_royale_event_results_key, event_code)
+    leaderboard_s = Get(context, key)
     if leaderboard_s != b'':
-        Delete(context,key)
+        Delete(context, key)
     leaders_s = Serialize(leaders)
-    Put(context,key,leaders_s)
+    Put(context, key, leaders_s)
     return True
 
 
-def set_BR_player_list(context,event_code,players):
-    key = concat(battle_royale_current_players_key,event_code)
-    players_s = Get(context,key)
+def set_BR_player_list(context, event_code, players):
+    key = concat(battle_royale_current_players_key, event_code)
+    players_s = Get(context, key)
     if players_s != b'':
-        Delete(context,key)
+        Delete(context, key)
     players_s = Serialize(players)
-    Put(context,key,players_s)
+    Put(context, key, players_s)
     return True
+
 
 # BR Accessors
 
@@ -2025,59 +2040,65 @@ Note: When getting from storage we must send these values in the serialized form
       and deserialize at the initial method call.
 """
 
-def get_BR_event_details(context,event_code):
+
+def get_BR_event_details(context, event_code):
     ''' Details of the BR event, capacity, owner, etc.'''
-    key = concat(battle_royale_details_key,event_code)
-    br_details = Get(context,key)
+    key = concat(battle_royale_details_key, event_code)
+    br_details = Get(context, key)
     return br_details
 
-def get_BR_entrant_details(context,event_code,address):
+
+def get_BR_entrant_details(context, event_code, address):
     ''' Details of the entrant, round action, action, etc.'''
     half_key = concat(battle_royale_entrant_key, event_code)
     complete_key = concat(half_key, address)
     stored_entrant = Get(context, complete_key)
-    #stored_entrant = Deserialize(stored_entrant_s)
+    # stored_entrant = Deserialize(stored_entrant_s)
     return stored_entrant
 
-def get_BR_destroyed_zone_depths(context,event_code):
+
+def get_BR_destroyed_zone_depths(context, event_code):
     ''' A list of zones that any player on them will be disqualified. '''
-    br_destroyed_zones_key = concat(battle_royale_destroyed_zones_key,event_code)
-    destroyed_zones = Get(context,br_destroyed_zones_key)
-    #destroyed_zones = [] if destroyed_zones_s == b'' else Deserialize(destroyed_zones_s)
+    br_destroyed_zones_key = concat(battle_royale_destroyed_zones_key, event_code)
+    destroyed_zones = Get(context, br_destroyed_zones_key)
+    # destroyed_zones = [] if destroyed_zones_s == b'' else Deserialize(destroyed_zones_s)
     return destroyed_zones
 
-def get_BR_rewards(context,event_code):
+
+def get_BR_rewards(context, event_code):
     ''' A list of the rewards of a BR event.'''
-    key = concat(battle_royale_rewards_key,event_code)
-    rewards = Get(context,key)
-    #rewards = [] if rewards_s == b'' else Deserialize(rewards_s)
+    key = concat(battle_royale_rewards_key, event_code)
+    rewards = Get(context, key)
+    # rewards = [] if rewards_s == b'' else Deserialize(rewards_s)
     return rewards
 
 
-def get_BR_marked_zones(context,event_code):
-    key = concat(battle_royale_marked_destroyed_zone_key,event_code)
-    zone = Get(context,key)
+def get_BR_marked_zones(context, event_code):
+    key = concat(battle_royale_marked_destroyed_zone_key, event_code)
+    zone = Get(context, key)
     return zone
 
-def get_BR_player_list(context,event_code):
-    key = concat(battle_royale_current_players_key,event_code)
-    players = Get(context,key)
+
+def get_BR_player_list(context, event_code):
+    key = concat(battle_royale_current_players_key, event_code)
+    players = Get(context, key)
     return players
 
 
-def get_BR_leaderboard(context,event_code):
-    key = concat(battle_royale_event_results_key,event_code)
-    leaderboard = Get(context,key)
-    #leaderboard = [] if leaderboard_s == b'' else Deserialize(leaderboard_s)
+def get_BR_leaderboard(context, event_code):
+    key = concat(battle_royale_event_results_key, event_code)
+    leaderboard = Get(context, key)
+    # leaderboard = [] if leaderboard_s == b'' else Deserialize(leaderboard_s)
     return leaderboard
 
 
-def remove_BR_event_details(context,event_code):
-    key = concat(battle_royale_details_key,event_code)
-    br_details_s = Get(context,key)
+def remove_BR_event_details(context, event_code):
+    key = concat(battle_royale_details_key, event_code)
+    br_details_s = Get(context, key)
     if br_details_s != b'':
-        Delete(context,key)
+        Delete(context, key)
     return True
+
 
 # Random number generation
 
@@ -2087,6 +2108,7 @@ def random_number_0_100():
     index = header.ConsensusData
     random_number = index % 99
     return random_number
+
 
 def random_number_upper_limit(limit):
     height = GetHeight()
