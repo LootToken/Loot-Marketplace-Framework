@@ -1,4 +1,4 @@
-# LOOT Marketplace Framework
+# LOOT Marketplace Framework & LootClicker
 
 #### We are bringing blockchain gaming to the mainstream, providing a complete and viable solution to digitalizing assets in fast paced large scale commercial games without hindering the end user.
 
