@@ -210,7 +210,7 @@ def Main(operation, args):
                 if len(args) == 3:
                     marketplace = args[0]
                     originator_address = args[1]
-                    item_id = args[3]
+                    item_id = args[2]
 
                     if CheckWitness(originator_address):
                         return False
