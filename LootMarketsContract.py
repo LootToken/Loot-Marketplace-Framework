@@ -458,10 +458,8 @@ def Main(operation, args):
                 return BR_finish_round(event_code)
 
         if operation == "BR_get_leaderboard":
-
             if len(args) == 1:
                 context = GetContext()
-
                 event_code = args[0]
                 leaderboard = get_BR_leaderboard(context, event_code)
                 if leaderboard != b'':
