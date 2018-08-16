@@ -203,23 +203,6 @@ def Main(operation, args):
                 Notify(payload)
                 return operation_result
 
-        if operation == "give_items":
-            marketplace = args[0]
-            address_to = args[1]
-            marketplace_owner = args[2]
-            marketplace_owner_signature = args[3]
-            marketplace_owner_public_key = args[4]
-            originator_order_salt = args[5]
-
-            # Remove verification arguments, leaving the item ids to give an address.
-            for i in range(0, 6):
-                args.remove(0)
-
-            operation_result = give_items_verified(marketplace, address_to, marketplace_owner,
-                                                   marketplace_owner_signature, marketplace_owner_public_key, args)
-            payload = ["give_items", originator_order_salt, marketplace, operation_result]
-            Notify(payload)
-            return operation_result
 
         if operation == "remove_item":
             # Remove item must have a terminated implementation so users can still access their assets.
@@ -662,52 +645,6 @@ def give_item(marketplace, taker_address, item_id):
     save_inventory(marketplace, taker_address, inventory_s)
 
     return True
-
-def give_items_verified(marketplace, taker_address, item_id,
-                        owner_address, owner_signature,
-                        owner_public_key, salt, items):
-    """
-    Give many items at once.
-    This can be useful for developers giving  their users many items at once.
-    In game item bundles would not be efficient to send many verifiable items at once.
-    With a cap of 16 parameters being passable to the smart contract,
-    and the first 6 parameters being used for verification,
-    it allows up to 10 items that are currently able to be given to a user at once.
-    """
-    if not is_marketplace_owner(marketplace, owner_address):
-        print("ERROR! Only a marketplace owner is allowed to give items.")
-        return False
-
-    if order_complete(salt):
-        print("ERROR! This order has already occurred!")
-        return False
-
-    args = ["give_items", marketplace, taker_address, item_id, 0, salt, items]
-    if not verify_order(owner_address, owner_signature, owner_public_key, args):
-        print("A marketplace owner has not signed this order.")
-        return False
-
-    inventory_s = get_inventory(marketplace, taker_address)
-
-    # If the inventory has no items, create a new list, else get the pre-existing list.
-    if inventory_s == b'':
-        inventory = []
-    else:
-        inventory = Deserialize(inventory_s)
-
-    # This method does not work if this print statement is removed.
-    print("placeholder")
-    for item in args:
-        inventory.append(item)
-
-    # Serialize and save the modified inventory back into storage.
-    inventory_s = Serialize(inventory)
-    save_inventory(marketplace, taker_address, inventory_s)
-
-    set_order_complete(salt)
-
-    return True
-
 
 
 def remove_item_verified(marketplace, address, item_id, salt, owner_address,
